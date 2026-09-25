@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "wedding-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "wedding-site", "run", "dev", "--", "--port", "4173", "--host"],
+      "port": 4173
+    }
+  ]
+}
