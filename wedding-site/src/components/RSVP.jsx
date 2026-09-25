@@ -99,7 +99,7 @@ export default function RSVP() {
           className="bg-white rounded-3xl border border-brand-border p-8 lg:p-12 shadow-[0_15px_40px_rgba(20,17,12,0.06)]"
         >
           {/* Invite Code */}
-          <div className="mb-8 p-5 bg-brand-cream/60 rounded-2xl border border-brand-border">
+          <div className="mb-8 p-5 bg-brand-pink #F5ECF1/60 rounded-2xl border border-brand-border">
             <label className="block text-[10px] font-semibold tracking-[0.2em] text-brand-espresso mb-2">
               5-DIGIT INVITE CODE *
             </label>
