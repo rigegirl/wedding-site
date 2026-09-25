@@ -34,7 +34,7 @@ export default function Wishlist() {
               To help us start our new home together, we have handpicked items we need most. You can
               select any item to pay for it and bless our union directly.
             </p>
-            <button className="self-start flex items-center gap-2 px-8 py-3.5 bg-brand-black text-brand-cream rounded-full text-[11px] font-semibold tracking-[0.12em] hover:brightness-150 transition-all">
+            <button className="self-start flex items-center gap-2 px-8 py-3.5 bg-brand-black text-[#F9F9F1] rounded-full text-[11px] font-semibold tracking-[0.12em] hover:brightness-150 transition-all">
               <ShoppingBag size={16} />
               VIEW CURATED REGISTRY
             </button>
@@ -115,7 +115,7 @@ export default function Wishlist() {
                 <div className="flex gap-2">
                   {item.status === 'available' && !item.isCashGift && (
                     <>
-                      <button className="flex-1 py-2.5 bg-brand-black text-brand-cream rounded-full text-[10px] font-semibold tracking-[0.1em] hover:brightness-150 transition-all">
+                      <button className="flex-1 py-2.5 bg-brand-black text-[#F9F9F1] rounded-full text-[10px] font-semibold tracking-[0.1em] hover:brightness-150 transition-all">
                         PAY FOR ITEM
                       </button>
                       <button className="flex-1 py-2.5 bg-white border border-brand-border text-brand-espresso rounded-full text-[10px] font-semibold tracking-[0.1em] hover:bg-brand-cream transition-all">

@@ -15,14 +15,14 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-brand-black text-brand-cream py-24 lg:py-32 px-6">
+    <footer className="bg-brand-black text-[#F9F9F1] py-24 lg:py-32 px-6">
       <div className="max-w-[800px] mx-auto text-center">
         {/* Monogram */}
         <div className="w-[80px] h-[80px] rounded-full border-2 border-brand-gold/40 flex items-center justify-center mx-auto mb-12">
-          <span className="font-script text-brand-cream text-3xl">O&O</span>
+          <span className="font-script text-[#F9F9F1] text-3xl">O&O</span>
         </div>
 
-        <p className="font-serif text-3xl lg:text-4xl text-brand-cream/90 mb-6">
+        <p className="font-serif text-3xl lg:text-4xl text-[#F9F9F1]/90 mb-6">
           Thank you for celebrating with us
         </p>
 
@@ -30,7 +30,7 @@ export default function Footer() {
           {weddingData.couple.partner1} & {weddingData.couple.partner2}
         </h2>
 
-        <p className="text-[11px] tracking-[0.25em] text-brand-cream/50 uppercase mb-16">
+        <p className="text-[11px] tracking-[0.25em] text-[#F9F9F1]/50 uppercase mb-16">
           {dateStr} &bull; {weddingData.location}
         </p>
 
@@ -39,21 +39,21 @@ export default function Footer() {
           className="w-12 h-12 rounded-full border border-brand-cream/20 flex items-center justify-center mx-auto mb-16 hover:border-brand-cream/50 hover:bg-brand-cream/5 transition-all"
           aria-label="Back to top"
         >
-          <ArrowUp size={18} className="text-brand-cream/60" />
+          <ArrowUp size={18} className="text-[#F9F9F1]/60" />
         </button>
 
         <div className="border-t border-white/10 pt-8">
-          <p className="text-[11px] text-brand-cream/30 mb-2">
+          <p className="text-[11px] text-[#F9F9F1]/30 mb-2">
             &copy; 2026 {weddingData.couple.partner1} & {weddingData.couple.partner2}. All Rights
             Reserved.
           </p>
-          <p className="text-[11px] text-brand-cream/30">
+          <p className="text-[11px] text-[#F9F9F1]/30">
             Built by{' '}
             <a
               href="#"
-              className="underline hover:text-brand-cream/60 transition-colors"
+              className="underline hover:text-[#F9F9F1]/60 transition-colors"
             >
-              Oreoluwa Okunade
+              Hillcity Edgetech
             </a>
           </p>
         </div>

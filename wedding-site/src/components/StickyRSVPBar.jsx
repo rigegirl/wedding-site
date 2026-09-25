@@ -17,7 +17,7 @@ export default function StickyRSVPBar() {
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
       <div className="flex items-center gap-3 bg-brand-black/90 backdrop-blur-md rounded-full pl-5 pr-2 py-2 shadow-[0_12px_40px_rgba(0,0,0,0.3)]">
         <Calendar size={14} className="text-brand-gold flex-shrink-0" />
-        <span className="text-brand-cream/80 text-[11px] tracking-wide whitespace-nowrap">
+        <span className="text-brand-[cream]/80 text-[11px] tracking-wide whitespace-nowrap">
           {dateStr}
         </span>
         <button

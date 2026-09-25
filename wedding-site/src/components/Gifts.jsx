@@ -36,8 +36,7 @@ export default function Gifts() {
             Your kindness means a lot
           </p>
           <p className="text-brand-gray text-sm leading-relaxed max-w-lg mx-auto">
-            Your presence at our wedding is the greatest gift of all. However, if you wish to
-            honour us with a gift, we have provided options below.
+            Your presence at our wedding is the greatest gift of all.
           </p>
         </div>
 
@@ -72,7 +71,7 @@ export default function Gifts() {
 
               <button
                 onClick={() => copyToClipboard(account.accountNumber, i)}
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand-black text-brand-cream rounded-full text-[10px] font-semibold tracking-[0.12em] hover:brightness-150 transition-all"
+                className="inline-flex items-center gap-2 px-6 py-2.5 bg-brand-black text-[#F9F9F1] rounded-full text-[10px] font-semibold tracking-[0.12em] hover:brightness-150 transition-all"
               >
                 {copiedId === i ? (
                   <>

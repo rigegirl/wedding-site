@@ -74,7 +74,7 @@ export default function SaveTheDate() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-3 px-8 py-3.5 bg-brand-black text-brand-cream rounded-full text-[11px] font-semibold tracking-[0.12em] hover:brightness-150 transition-all duration-300"
+              className="flex items-center gap-3 px-8 py-3.5 bg-brand-black text-[#F9F9F1] rounded-full text-[11px] font-semibold tracking-[0.12em] hover:brightness-150 transition-all duration-300"
             >
               <CalendarPlus size={16} />
               ADD WEDDING TO CALENDAR
@@ -103,7 +103,7 @@ export default function SaveTheDate() {
         </div>
 
         {/* Venue Card */}
-        <div className="relative bg-brand-black rounded-3xl overflow-hidden shadow-[0_15px_40px_rgba(20,17,12,0.15)] text-brand-cream">
+        <div className="relative bg-brand-black rounded-3xl overflow-hidden shadow-[0_15px_40px_rgba(20,17,12,0.15)] text-[#F9F9F1]">
           <img
             src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&q=80"
             alt="Venue"
@@ -119,7 +119,7 @@ export default function SaveTheDate() {
 
             <div className="mb-8">
               <h4 className="font-serif text-2xl mb-2">Church</h4>
-              <p className="text-brand-cream/70 text-sm leading-relaxed">
+              <p className="text-[#F9F9F1]/70 text-sm leading-relaxed">
                 {weddingData.venues.church.name},<br />
                 {weddingData.venues.church.address}
               </p>
@@ -127,7 +127,7 @@ export default function SaveTheDate() {
 
             <div className="mb-10">
               <h4 className="font-serif text-2xl mb-2">Reception</h4>
-              <p className="text-brand-cream/70 text-sm leading-relaxed">
+              <p className="text-[#F9F9F1]/70 text-sm leading-relaxed">
                 {weddingData.venues.reception.name},<br />
                 {weddingData.venues.reception.address}
               </p>
@@ -140,7 +140,7 @@ export default function SaveTheDate() {
                 href={weddingData.venues.church.mapUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-brand-espresso text-brand-cream rounded-full text-[10px] font-semibold tracking-[0.12em] hover:brightness-150 transition-all flex-1"
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-brand-espresso text-[#F9F9F1] rounded-full text-[10px] font-semibold tracking-[0.12em] hover:brightness-150 transition-all flex-1"
               >
                 CHURCH DIRECTIONS
                 <ExternalLink size={13} />

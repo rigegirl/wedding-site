@@ -72,8 +72,8 @@ export default function Header() {
               onClick={() => scrollTo(item.id)}
               className={`text-[11px] font-medium tracking-[0.2em] transition-all duration-300 pb-1 border-b-[1.5px] ${
                 activeSection === item.id
-                  ? 'text-brand-wine border-brand-wine'
-                  : 'text-brand-cream/70 border-transparent hover:text-brand-cream'
+                  ? 'text-brand-gold border-brand-cream'
+                  : 'text-[#F9F9F1]/70 border-transparent hover:text-[#F9F9F1]'
               }`}
             >
               {item.label}
@@ -84,7 +84,7 @@ export default function Header() {
         {/* RSVP Button */}
         <button
           onClick={() => scrollTo('rsvp')}
-          className="hidden lg:flex items-center px-7 py-2.5 rounded-full bg-brand-wine text-brand-cream text-[11px] font-semibold tracking-[0.15em] hover:brightness-110 hover:-translate-y-0.5 transition-all duration-300"
+          className="hidden lg:flex items-center px-7 py-2.5 rounded-full bg-brand-wine text-[#F9F9F1] text-[11px] font-semibold tracking-[0.15em] hover:brightness-110 hover:-translate-y-0.5 transition-all duration-300"
         >
           KINDLY RSVP
         </button>
@@ -95,9 +95,9 @@ export default function Header() {
           className="lg:hidden flex flex-col gap-1.5 p-2"
           aria-label="Toggle menu"
         >
-          <span className={`block w-6 h-0.5 bg-brand-wine transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`block w-6 h-0.5 bg-brand-wine transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} />
-          <span className={`block w-6 h-0.5 bg-brand-wine transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <span className={`block w-6 h-0.5 bg-brand-cream transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
+          <span className={`block w-6 h-0.5 bg-brand-cream transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} />
+          <span className={`block w-6 h-0.5 bg-brand-cream transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
         </button>
       </div>
 
@@ -110,7 +110,7 @@ export default function Header() {
                 key={item.id}
                 onClick={() => scrollTo(item.id)}
                 className={`text-[12px] tracking-[0.2em] transition-colors ${
-                  activeSection === item.id ? 'text-brand-wine' : 'text-brand-cream/70'
+                  activeSection === item.id ? 'text-[#F9F9F1]' : 'text-[#F9F9F1]/70'
                 }`}
               >
                 {item.label}
@@ -118,7 +118,7 @@ export default function Header() {
             ))}
             <button
               onClick={() => scrollTo('rsvp')}
-              className="mt-2 px-8 py-2.5 rounded-full bg-brand-wine-light text-brand-black text-[11px] font-semibold tracking-[0.15em]"
+              className="mt-2 px-8 py-2.5 rounded-full bg-brand-wine-light text-[#F9F9F1] text-[11px] font-semibold tracking-[0.15em]"
             >
               KINDLY RSVP
             </button>

@@ -5,7 +5,6 @@ import SaveTheDate from './components/SaveTheDate';
 import Programme from './components/Programme';
 import Colours from './components/Colours';
 import Gifts from './components/Gifts';
-import Wishlist from './components/Wishlist';
 import FAQ from './components/FAQ';
 import RSVP from './components/RSVP';
 import Gallery from './components/Gallery';
@@ -15,7 +14,7 @@ import MusicPlayer from './components/MusicPlayer';
 
 export default function App() {
   return (
-    <div className="bg-brand-cream min-h-screen text-brand-espresso font-sans">
+    <div className="bg-brand-cream min-h-screen text-[#F9F9F1] font-sans">
       <Header />
       <Hero />
       <Countdown />
@@ -23,7 +22,6 @@ export default function App() {
       <Programme />
       <Colours />
       <Gifts />
-      <Wishlist />
       <FAQ />
       <RSVP />
       <Gallery />

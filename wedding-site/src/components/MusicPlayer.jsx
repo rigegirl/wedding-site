@@ -27,7 +27,7 @@ export default function MusicPlayer() {
       {playing ? (
         <Volume2 size={16} className="text-brand-gold" />
       ) : (
-        <VolumeX size={16} className="text-brand-cream/50" />
+        <VolumeX size={16} className="text-[#F9F9F1]/50" />
       )}
     </button>
   );
