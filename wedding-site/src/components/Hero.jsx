@@ -24,8 +24,10 @@ export default function Hero() {
           We joyfully invite you to our wedding
         </p>
 
-        <h1 className="font-script text-brand-cream text-5xl sm:text-6xl lg:text-8xl mb-8">
-          {weddingData.couple.partner1} & {weddingData.couple.partner2}
+<h1
+  className="font-script text-5xl sm:text-6xl lg:text-8xl mb-8"
+  style={{ color: '#F9F9F1' }}
+>          {weddingData.couple.partner1} & {weddingData.couple.partner2}
         </h1>
 
         <div className="flex items-center justify-center gap-2 text-brand-cream/80 mb-4">
