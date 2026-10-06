@@ -2,6 +2,7 @@
 
 @theme {
   --color-brand-pink: #F5ECF1;
+  --color-brand-cream: #F9F9F1;
   --color-brand-espresso: #2A2623;
   --color-brand-black: #11100E;
   --color-brand-gold: #B49E77;
@@ -10,6 +11,13 @@
   --color-brand-green: #334A33;
   --color-brand-gray: #77736D;
   --color-brand-border: #E5DFD3;
+
+  /* Added for the floral-blush backdrop: deeper tones that hold contrast
+     against #F5ECF1. The original brand-gold (#B49E77) and brand-gray
+     (#77736D) both fall under 3:1 on the new background. */
+  --color-brand-berry: #6E1247;
+  --color-brand-gold-deep: #8A6534;
+  --color-brand-taupe: #6A6058;
 
   --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
   --font-script: 'Great Vibes', cursive;
@@ -20,9 +28,42 @@ html {
   scroll-behavior: smooth;
 }
 
+/*
+ * Site backdrop built from the invitation artwork.
+ *
+ * It is a FIXED full-viewport layer (not a repeating / scrolling tile) on
+ * purpose: the artwork is a 1366x7349 stacked 3-page export, so tiling it
+ * down a long page would tear the floral frame and show page breaks.
+ * Anchored `top center` keeps the ring motif + top border in view.
+ *
+ * The ivory gradient in front softens the artwork so dark text stays
+ * readable over the busier floral areas.
+ */
+.site-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top center;
+  background-image:
+    linear-gradient(rgba(249, 249, 241, 0.55), rgba(249, 249, 241, 0.55)),
+    url('/images/ba');
+  pointer-events: none;
+}
+
+/* Narrower crop so the side florals survive on phones. */
+@media (max-width: 640px) {
+  .site-backdrop {
+    background-image:
+      linear-gradient(rgba(249, 249, 241, 0.6), rgba(249, 249, 241, 0.6)),
+      url('/images/background.png');
+  }
+}
+
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-brand-cream);
+  background-color: var(--color-brand-pink);
   color: var(--color-brand-espresso);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

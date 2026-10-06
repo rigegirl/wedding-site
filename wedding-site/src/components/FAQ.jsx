@@ -13,13 +13,13 @@ export default function FAQ() {
     <section id="qna" className="py-24 lg:py-36 px-6" style={{ scrollMarginTop: '100px' }}>
       <div className="max-w-[750px] mx-auto">
         <div className="text-center mb-16">
-          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold uppercase mb-4">
+          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold-deep uppercase mb-4">
             Q & A
           </p>
-          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-espresso mb-4">
+          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-berry mb-4">
             Questions & Answers
           </h2>
-          <p className="font-serif italic text-brand-gray text-lg">
+          <p className="font-serif italic text-brand-taupe text-lg">
             If you have any questions, please check our Q & A section first!
           </p>
         </div>
@@ -39,7 +39,7 @@ export default function FAQ() {
                 </span>
                 <ChevronDown
                   size={18}
-                  className={`text-brand-gray flex-shrink-0 transition-transform duration-300 ${
+                  className={`text-brand-taupe flex-shrink-0 transition-transform duration-300 ${
                     openIndex === i ? 'rotate-180' : ''
                   }`}
                 />
@@ -51,7 +51,7 @@ export default function FAQ() {
                 }`}
               >
                 <div className="px-7 pb-6">
-                  <p className="text-brand-gray text-sm leading-relaxed">{faq.answer}</p>
+                  <p className="text-brand-taupe text-sm leading-relaxed">{faq.answer}</p>
                 </div>
               </div>
             </div>

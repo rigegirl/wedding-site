@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { weddingData } from '../data/weddingData';
 import { Heart, ShoppingBag, Gift, Clock } from 'lucide-react';
 
 export default function Wishlist() {
-  const [items, setItems] = useState(weddingData.wishlist);
+  const items = weddingData.wishlist;
 
   const formatPrice = (price) => {
     if (!price) return '';
@@ -16,12 +15,12 @@ export default function Wishlist() {
         {/* Wishlist Intro */}
         <div className="bg-white rounded-3xl border border-brand-border overflow-hidden shadow-[0_15px_40px_rgba(20,17,12,0.06)] mb-16 grid lg:grid-cols-2">
           <div className="h-[300px] lg:h-auto">
-            <img
-              src="https://images.unsplash.com/photo-1606216794079-73f85bbd57d5?w=800&q=80"
-              alt="Couple"
-              className="w-full h-full object-cover"
-              style={{ filter: 'grayscale(80%)' }}
-            />
+        <img
+  src="/images/gallery4blur.jpeg"
+  alt="Couple"
+  className="w-full h-full object-cover"
+  style={{ filter: 'grayscale(80%)' }}
+/>
           </div>
           <div className="p-10 lg:p-14 flex flex-col justify-center">
             <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold uppercase mb-4">

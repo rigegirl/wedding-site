@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { weddingData } from '../data/weddingData';
-import { Copy, Check, CreditCard, Heart } from 'lucide-react';
+import { Copy, Check, CreditCard } from 'lucide-react';
 
 export default function Gifts() {
   const [copiedId, setCopiedId] = useState(null);
@@ -23,19 +23,19 @@ export default function Gifts() {
   };
 
   return (
-    <section className="py-24 lg:py-36 px-6">
+    <section id="gifts" className="py-24 lg:py-36 px-6" style={{ scrollMarginTop: '100px' }}>
       <div className="max-w-[1100px] mx-auto">
         <div className="text-center mb-16">
-          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold uppercase mb-4">
+          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold-deep uppercase mb-4">
             REGISTRY & BLESSINGS
           </p>
-          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-espresso mb-4">
+          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-berry mb-4">
             Gifts
           </h2>
-          <p className="font-serif italic text-brand-gray text-lg mb-6">
+          <p className="font-serif italic text-brand-taupe text-lg mb-6">
             Your kindness means a lot
           </p>
-          <p className="text-brand-gray text-sm leading-relaxed max-w-lg mx-auto">
+          <p className="text-brand-taupe text-sm leading-relaxed max-w-lg mx-auto">
             Your presence at our wedding is the greatest gift of all.
           </p>
         </div>
@@ -48,20 +48,20 @@ export default function Gifts() {
               className="bg-white rounded-3xl border border-brand-border p-8 lg:p-10 shadow-[0_15px_40px_rgba(20,17,12,0.06)] text-center"
             >
               <div className="flex items-center justify-center gap-2 mb-2">
-                <CreditCard size={18} className="text-brand-gold" />
+                <CreditCard size={18} className="text-brand-gold-deep" />
                 <h3 className="font-serif text-2xl text-brand-espresso">{account.bank}</h3>
               </div>
-              <p className="text-[10px] font-semibold tracking-[0.2em] text-brand-gray mb-6">
+              <p className="text-[10px] font-semibold tracking-[0.2em] text-brand-taupe mb-6">
                 {account.type}
               </p>
 
               <div className="mb-4">
-                <p className="text-[10px] tracking-[0.2em] text-brand-gray mb-1">ACCOUNT NAME</p>
+                <p className="text-[10px] tracking-[0.2em] text-brand-taupe mb-1">ACCOUNT NAME</p>
                 <p className="font-medium text-brand-espresso">{account.accountName}</p>
               </div>
 
               <div className="mb-6">
-                <p className="text-[10px] tracking-[0.2em] text-brand-gray mb-1">
+                <p className="text-[10px] tracking-[0.2em] text-brand-taupe mb-1">
                   ACCOUNT NUMBER
                 </p>
                 <p className="font-serif text-2xl font-semibold text-brand-espresso">

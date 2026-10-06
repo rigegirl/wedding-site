@@ -13,16 +13,74 @@ function fireConfetti() {
   });
 }
 
+/**
+ * Google Calendar expects UTC timestamps with a trailing Z. `weddingData.date`
+ * is a local-time string, so we must convert the *wall-clock* value into a real
+ * instant before appending Z — otherwise the event lands at the wrong hour for
+ * every guest outside the machine's own timezone.
+ */
+function toGoogleCalStamp(d) {
+  return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(
+    d.getHours()
+  )}${pad(d.getMinutes())}${pad(d.getSeconds())}Z`;
+}
+
+function pad(n) {
+  return String(n).padStart(2, '0');
+}
+
 function generateGoogleCalUrl() {
-  const d = new Date(weddingData.date);
-  const start = d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-  const endDate = new Date(d.getTime() + 6 * 60 * 60 * 1000);
-  const end = endDate.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  const startDate = new Date(weddingData.date);
+  const endDate = new Date(startDate.getTime() + 6 * 60 * 60 * 1000);
   return `https://calendar.google.com/calendar/event?action=TEMPLATE&text=${encodeURIComponent(
     `${weddingData.couple.partner1} & ${weddingData.couple.partner2}'s Wedding`
-  )}&dates=${start}/${end}&location=${encodeURIComponent(weddingData.location)}&details=${encodeURIComponent(
+  )}&dates=${toGoogleCalStamp(startDate)}/${toGoogleCalStamp(
+    endDate
+  )}&location=${encodeURIComponent(weddingData.location)}&details=${encodeURIComponent(
     'Wedding celebration! ' + weddingData.couple.hashtag
   )}`;
+}
+
+/**
+ * Outlook's web deep-link ignores unknown action types, so the honest fallback
+ * is a real .ics download — that one works in Outlook, Apple Calendar and
+ * Google Calendar instead of silently doing nothing.
+ */
+function generateOutlookIcs() {
+  const startDate = new Date(weddingData.date);
+  const endDate = new Date(startDate.getTime() + 6 * 60 * 60 * 1000);
+  const stamp = (d) =>
+    `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(
+      d.getHours()
+    )}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+
+  const title = `${weddingData.couple.partner1} & ${weddingData.couple.partner2}'s Wedding`;
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Wedding Site//EN',
+    'BEGIN:VEVENT',
+    `UID:${Date.now()}@wedding-site`,
+    `DTSTAMP:${stamp(new Date())}`,
+    `DTSTART:${stamp(startDate)}`,
+    `DTEND:${stamp(endDate)}`,
+    `SUMMARY:${title}`,
+    `LOCATION:${weddingData.location}`,
+    `DESCRIPTION:${weddingData.couple.hashtag}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n');
+
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'wedding.ics';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  // Revoke on the next tick so Safari has finished reading the blob.
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export default function SaveTheDate() {
@@ -40,7 +98,9 @@ export default function SaveTheDate() {
   const handleCalendarClick = (type) => {
     fireConfetti();
     if (type === 'google') {
-      window.open(generateGoogleCalUrl(), '_blank');
+      window.open(generateGoogleCalUrl(), '_blank', 'noopener,noreferrer');
+    } else if (type === 'outlook') {
+      generateOutlookIcs();
     }
     setDropdownOpen(false);
   };
@@ -48,13 +108,13 @@ export default function SaveTheDate() {
   return (
     <section className="pb-24 lg:pb-36 px-6">
       <div className="max-w-[900px] mx-auto text-center mb-16">
-        <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold uppercase mb-4">
+        <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold-deep uppercase mb-4">
           SAVE THE DATE
         </p>
-        <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-espresso mb-8">
+        <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-berry mb-8">
           This Day
         </h2>
-        <div className="inline-block bg-white rounded-2xl border border-brand-border px-12 py-8 shadow-[0_15px_40px_rgba(20,17,12,0.06)]">
+        <div className="inline-block bg-white/85 backdrop-blur-sm rounded-2xl border border-brand-border px-12 py-8 shadow-[0_15px_40px_rgba(20,17,12,0.06)]">
           <p className="font-serif text-2xl lg:text-3xl text-brand-espresso">{dateStr}</p>
         </div>
       </div>
@@ -62,11 +122,11 @@ export default function SaveTheDate() {
       <div className="max-w-[1100px] mx-auto grid lg:grid-cols-2 gap-6">
         {/* Save the Date Card */}
         <div className="relative bg-white rounded-3xl border border-brand-border overflow-hidden shadow-[0_15px_40px_rgba(20,17,12,0.06)] p-10 lg:p-14 flex flex-col justify-center items-center text-center">
-          <CalendarPlus size={36} className="text-brand-gold mb-6" />
+          <CalendarPlus size={36} className="text-brand-gold-deep mb-6" />
           <h3 className="font-serif text-3xl lg:text-4xl text-brand-espresso mb-4">
             Save the Date
           </h3>
-          <p className="text-brand-gray text-sm leading-relaxed mb-8 max-w-sm">
+          <p className="text-brand-taupe text-sm leading-relaxed mb-8 max-w-sm">
             We are so excited to celebrate our special day with you. Add the wedding to your
             calendar to stay updated!
           </p>
@@ -111,7 +171,7 @@ export default function SaveTheDate() {
           />
           <div className="relative z-10 p-10 lg:p-14">
             <div className="flex items-center gap-2 mb-8">
-              <MapPin size={16} className="text-brand-gold" />
+              <MapPin size={16} className="text-brand-gold-light" />
               <span className="text-[11px] font-semibold tracking-[0.25em] text-brand-gold uppercase">
                 VENUE & LOCATION
               </span>

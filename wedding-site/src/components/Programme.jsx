@@ -3,6 +3,7 @@ import { Church, UtensilsCrossed } from 'lucide-react';
 
 const icons = {
   'Church Wedding': Church,
+  'Engagement Ceremony & Reception': UtensilsCrossed,
   'Reception & Banquet': UtensilsCrossed,
 };
 
@@ -11,10 +12,10 @@ export default function Programme() {
     <section id="programme" className="py-24 lg:py-36 px-6" style={{ scrollMarginTop: '100px' }}>
       <div className="max-w-[800px] mx-auto">
         <div className="text-center mb-20">
-          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold uppercase mb-4">
+          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold-deep uppercase mb-4">
             ORDER OF EVENTS
           </p>
-          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-espresso">
+          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-berry">
             Programme
           </h2>
         </div>
@@ -34,7 +35,7 @@ export default function Programme() {
                   <div className="flex items-start gap-5">
                     <div className="flex flex-col items-center flex-shrink-0">
                       <div className="w-12 h-12 rounded-full bg-brand-cream border-2 border-brand-gold/30 flex items-center justify-center">
-                        <Icon size={18} className="text-brand-gold" />
+                        <Icon size={18} className="text-brand-gold-deep" />
                       </div>
                       {i < weddingData.programme.length - 1 && (
                         <div className="w-[1px] h-20 bg-brand-border mt-2" />
@@ -45,10 +46,10 @@ export default function Programme() {
                         {event.time}
                       </span>
                       <h3 className="font-serif text-2xl text-brand-espresso mt-1">{event.title}</h3>
-                      <p className="font-serif italic text-brand-gray text-sm mt-1">{event.subtitle}</p>
-                      <p className="text-brand-gray text-sm leading-relaxed mt-3">{event.description}</p>
+                      <p className="font-serif italic text-brand-taupe text-sm mt-1">{event.subtitle}</p>
+                      <p className="text-brand-taupe text-sm leading-relaxed mt-3">{event.description}</p>
                       {event.tag && (
-                        <span className="inline-block mt-3 px-3 py-1 bg-brand-cream border border-brand-border rounded-full text-[9px] font-semibold tracking-[0.15em] text-brand-gray">
+                        <span className="inline-block mt-3 px-3 py-1 bg-brand-cream border border-brand-border rounded-full text-[9px] font-semibold tracking-[0.15em] text-brand-taupe">
                           {event.tag}
                         </span>
                       )}
@@ -63,10 +64,10 @@ export default function Programme() {
                       {event.time}
                     </span>
                     <h3 className="font-serif text-3xl text-brand-espresso mt-1">{event.title}</h3>
-                    <p className="font-serif italic text-brand-gray mt-1">{event.subtitle}</p>
-                    <p className="text-brand-gray text-sm leading-relaxed mt-3">{event.description}</p>
+                    <p className="font-serif italic text-brand-taupe mt-1">{event.subtitle}</p>
+                    <p className="text-brand-taupe text-sm leading-relaxed mt-3">{event.description}</p>
                     {event.tag && (
-                      <span className="inline-block mt-3 px-3 py-1 bg-brand-cream border border-brand-border rounded-full text-[9px] font-semibold tracking-[0.15em] text-brand-gray">
+                      <span className="inline-block mt-3 px-3 py-1 bg-brand-cream border border-brand-border rounded-full text-[9px] font-semibold tracking-[0.15em] text-brand-taupe">
                         {event.tag}
                       </span>
                     )}
@@ -74,7 +75,7 @@ export default function Programme() {
 
                   <div className="col-start-2 row-start-1 flex justify-center">
                     <div className="w-14 h-14 rounded-full bg-brand-cream border-2 border-brand-gold/30 flex items-center justify-center z-10">
-                      <Icon size={20} className="text-brand-gold" />
+                      <Icon size={20} className="text-brand-gold-deep" />
                     </div>
                   </div>
 

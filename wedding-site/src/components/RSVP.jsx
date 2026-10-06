@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { weddingData } from '../data/weddingData';
-import { Key, Send, Check, CircleCheck } from 'lucide-react';
+import { Key, Send, CircleCheck } from 'lucide-react';
 
 export default function RSVP() {
   const [form, setForm] = useState({
@@ -57,7 +57,7 @@ export default function RSVP() {
       <section id="rsvp" className="py-24 lg:py-36 px-6" style={{ scrollMarginTop: '100px' }}>
         <div className="max-w-[600px] mx-auto text-center">
           <div className="bg-white rounded-3xl border border-brand-border p-12 shadow-[0_15px_40px_rgba(20,17,12,0.06)]">
-            <div className="w-16 h-16 rounded-full bg-brand-PINK #F5ECF1/10 flex items-center justify-center mx-auto mb-6">
+            <div className="w-16 h-16 rounded-full bg-brand-pink flex items-center justify-center mx-auto mb-6">
               <CircleCheck size={32} className="text-brand-green" />
             </div>
             <h3 className="font-serif text-3xl text-brand-espresso mb-3">Thank You!</h3>
@@ -79,7 +79,7 @@ export default function RSVP() {
     <section id="rsvp" className="py-24 lg:py-36 px-6" style={{ scrollMarginTop: '100px' }}>
       <div className="max-w-[650px] mx-auto">
         <div className="text-center mb-12">
-          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-WINE #A9008D uppercase mb-4">
+          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-wine uppercase mb-4">
             JOIN OUR CELEBRATION
           </p>
           <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-espresso mb-4">
@@ -99,7 +99,7 @@ export default function RSVP() {
           className="bg-white rounded-3xl border border-brand-border p-8 lg:p-12 shadow-[0_15px_40px_rgba(20,17,12,0.06)]"
         >
           {/* Invite Code */}
-          <div className="mb-8 p-5 bg-brand-pink #F5ECF1/60 rounded-2xl border border-brand-border">
+          <div className="mb-8 p-5 bg-brand-pink/60 rounded-2xl border border-brand-border">
             <label className="block text-[10px] font-semibold tracking-[0.2em] text-brand-espresso mb-2">
               5-DIGIT INVITE CODE *
             </label>

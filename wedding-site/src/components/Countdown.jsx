@@ -41,32 +41,32 @@ export default function Countdown() {
   return (
     <section className="py-24 lg:py-36 px-6">
       <div className="max-w-[900px] mx-auto text-center">
-        <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold uppercase mb-4">
+        <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold-deep uppercase mb-4">
           THE JOURNEY BEGINS
         </p>
 
-        <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-espresso mb-4">
+        <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-berry mb-4">
           Event Starts In
         </h2>
 
-        <p className="font-serif italic text-brand-gray text-lg mb-16">
+        <p className="font-serif italic text-brand-taupe text-lg mb-16">
           Counting down every second until we say &ldquo;I Do&rdquo;
         </p>
 
         <div className="grid grid-cols-4 gap-4 lg:gap-8 mb-16">
           {units.map((unit) => (
             <div key={unit.label} className="text-center">
-              <span className="font-serif text-5xl sm:text-7xl lg:text-9xl font-light text-brand-espresso leading-none">
+              <span className="font-serif text-5xl sm:text-7xl lg:text-9xl font-light text-brand-berry leading-none">
                 {String(unit.value).padStart(2, '0')}
               </span>
-              <p className="text-[10px] tracking-[0.25em] text-brand-gray mt-3 font-medium">
+              <p className="text-[10px] tracking-[0.25em] text-brand-gold-deep mt-3 font-medium">
                 {unit.label}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="flex items-center justify-center gap-2 text-brand-gray">
+        <div className="flex items-center justify-center gap-2 text-brand-taupe">
           <Clock size={16} />
           <span className="text-sm font-medium">{dateStr}</span>
         </div>

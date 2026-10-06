@@ -13,17 +13,17 @@ export default function Colours() {
     <section id="colours" className="py-24 lg:py-36 px-6" style={{ scrollMarginTop: '100px' }}>
       <div className="max-w-[1100px] mx-auto">
         <div className="text-center mb-16">
-          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold uppercase mb-4">
+          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold-deep uppercase mb-4">
             THE DRESS CODE
           </p>
-          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-espresso mb-6">
+          <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-wine mb-6">
             Colours of the Day
           </h2>
-          <p className="text-brand-gray text-sm leading-relaxed max-w-xl mx-auto">
+          <p className="text-brand-taupe text-sm leading-relaxed max-w-xl mx-auto">
             We invite our guests to express themselves in beautiful{' '}
             <strong>traditional</strong>, <strong>contemporary</strong>,{' '}
             <strong>red carpet</strong>, or <strong>modern chic</strong> styles in shades of
-            Vintage Wine and Forest Green with champagne gold accents.
+            Burgundy and champagne gold accents.
           </p>
         </div>
 
@@ -32,10 +32,10 @@ export default function Colours() {
           {weddingData.colours.map((colour) => (
             <div
               key={colour.name}
-              className="relative rounded-3xl overflow-hidden h-[400px] lg:h-[600px] flex items-center justify-center shadow-[0_15px_40px_rgba(20,17,12,0.1)]"
+              className="relative rounded-3xl overflow-hidden h-[220px] lg:h-[260px] flex items-center justify-center shadow-[0_15px_40px_rgba(20,17,12,0.1)]"
               style={{ background: colour.fallbackGradient }}
             >
-              <h3 className="font-serif text-5xl lg:text-7xl text-white relative z-10">
+              <h3 className="font-serif text-3xl lg:text-4xl text-white relative z-10">
                 {colour.name}
               </h3>
             </div>
@@ -44,13 +44,13 @@ export default function Colours() {
 
         {/* Style Inspiration */}
         <div className="text-center mb-16">
-          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold uppercase mb-4">
+          <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-gold-deep uppercase mb-4">
             STYLE INSPIRATION
           </p>
           <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-brand-espresso mb-4">
             Style Inspiration
           </h2>
-          <p className="font-serif italic text-brand-gray text-lg">
+          <p className="font-serif italic text-brand-taupe text-lg">
             Examples of gorgeous traditional and contemporary looks we love
           </p>
         </div>
@@ -83,11 +83,11 @@ export default function Colours() {
                 </button>
               </div>
               <div className="p-8">
-                <p className="text-[10px] font-semibold tracking-[0.2em] text-brand-gold uppercase mb-2">
+                <p className="text-[10px] font-semibold tracking-[0.2em] text-brand-gold-deep uppercase mb-2">
                   {item.category}
                 </p>
                 <h3 className="font-serif text-2xl text-brand-espresso mb-2">{item.title}</h3>
-                <p className="text-brand-gray text-sm leading-relaxed">{item.description}</p>
+                <p className="text-brand-taupe text-sm leading-relaxed">{item.description}</p>
               </div>
             </div>
           ))}

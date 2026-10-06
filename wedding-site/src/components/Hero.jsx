@@ -1,5 +1,6 @@
 import { weddingData } from '../data/weddingData';
 import { MapPin, ChevronDown } from 'lucide-react';
+import heroImage from '../assets/hero1.png';
 
 export default function Hero() {
   return (
@@ -11,7 +12,7 @@ export default function Hero() {
       {/* Background */}
       <div className="absolute inset-0 bg-brand-black">
         <img
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80"
+         src={heroImage}
           alt="Wedding couple"
           className="w-full h-full object-cover opacity-40"
         />
@@ -20,7 +21,7 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 py-20">
-        <p className="font-serif italic text-brand-cream/90 text-xl sm:text-2xl lg:text-3xl mb-6 leading-relaxed">
+        <p className="font-serif italic text-[#F9F9F1]/90 text-xl sm:text-2xl lg:text-3xl mb-6 leading-relaxed">
           We joyfully invite you to our wedding
         </p>
 
@@ -30,7 +31,7 @@ export default function Hero() {
 >          {weddingData.couple.partner1} & {weddingData.couple.partner2}
         </h1>
 
-        <div className="flex items-center justify-center gap-2 text-brand-cream/80 mb-4">
+        <div className="flex items-center justify-center gap-2 text-[#F9F9F1]/80 mb-4">
           <MapPin size={16} />
           <span className="text-[11px] font-medium tracking-[0.25em] uppercase">
             {weddingData.location}
@@ -42,10 +43,10 @@ export default function Hero() {
         </p>
 
         <div className="mt-16 animate-bounce">
-          <span className="text-brand-cream/50 text-[10px] tracking-[0.3em] uppercase block mb-2">
+          <span className="text-[#F9F9F1]/50 text-[10px] tracking-[0.3em] uppercase block mb-2">
             SCROLL
           </span>
-          <ChevronDown size={20} className="mx-auto text-brand-cream/50" />
+          <ChevronDown size={20} className="mx-auto text-[#F9F9F1]/50" />
         </div>
       </div>
     </section>

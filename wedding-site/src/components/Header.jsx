@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { weddingData } from '../data/weddingData';
-import { ChevronDown } from 'lucide-react';
+import weddingLogo from '../assets/wedding-logo.JPG';
 
 const navItems = [
   { id: 'welcome', label: 'WELCOME' },
   { id: 'programme', label: 'PROGRAMME' },
   { id: 'colours', label: 'COLOURS' },
-  { id: 'Gifts', label: 'GIFTS' },
+  { id: 'gifts', label: 'GIFTS' },
   { id: 'qna', label: 'Q & A' },
   { id: 'rsvp', label: 'KINDLY RSVP' },
   { id: 'gallery', label: 'GALLERY' },
@@ -57,12 +56,12 @@ export default function Header() {
       <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between h-[80px] lg:h-[100px]">
         {/* Logo */}
         <button onClick={() => scrollTo('welcome')} className="flex-shrink-0">
-         <img
-  src="/src/assets/wedding-logo.jpg"
-  alt="Wedding logo"
-  className="w-[60px] h-[60px] lg:w-[75px] lg:h-[75px] object-contain"
-/>
-</button>
+          <img
+            src={weddingLogo}
+            alt="Wedding logo"
+            className="w-[60px] h-[60px] lg:w-[75px] lg:h-[75px] object-contain"
+          />
+        </button>
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-8">

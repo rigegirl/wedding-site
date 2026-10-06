@@ -8,18 +8,18 @@ export const weddingData = {
 
   date: '2026-11-28T11:00:00',
   location: 'Lagos, Nigeria',
-  rsvpDeadline: '2026-10-01',
+  rsvpDeadline: '2026-10-10',
 
   venues: {
     church: {
       name: "RCCG, CHAPEL OF MERCY",
       address: '15, Aladelola, Off Ikosi Road, Ketu, Lagos',
-      mapUrl: 'https://maps.google.com/?q=Celebration+Church+Intl+Celebr8+Centre+Ogba+Lagos',
+      mapUrl: 'https://maps.google.com/?q=RCCG+Chapel+of+Mercy+Ketu+Lagos',
     },
     reception: {
       name: 'Adela Hall',
       address: 'Opposite Daystar Christian Center, Oregun, Lagos, Nigeria',
-      mapUrl: 'https://maps.google.com/?q=Excellence+Hotel+Lateef+Jakande+Rd+Ogba+Lagos',
+      mapUrl: 'https://maps.google.com/?q=Adela+hall+Lagos',
     },
   },
 
@@ -27,7 +27,7 @@ export const weddingData = {
     {
       time: '10:00 AM',
       title: 'Church Wedding',
-      subtitle: 'Holy Matrimony & Sacred Vows',
+      subtitle: 'Holy Matrimony Before God',
       description:
         'Guests are kindly requested to be seated by 09:30 AM for the processional, exchange of vows, and nuptial blessing.',
       tag: 'OFFICIAL',
@@ -53,24 +53,24 @@ export const weddingData = {
       name: 'Champagne Gold',
       hex: '#A68052',
       image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80',
-      fallbackGradient: 'linear-gradient(135deg, #3f3b0a 0%, #838110 50%, #A68052 100%)',
+      fallbackGradient: 'linear-gradient(135deg, #3f3b0a 0%, #837b10 50%, #A68052 100%)',
     },
   ],
 
   styleInspiration: [
     {
-      image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80',
-      category: 'CURATED FLATLAY',
-      title: 'Pantone & Palette Moodboard',
+      image: '/images/style-inspiration-1.jpg',
+      category: 'TRADITIONAL WEDDING',
+      title: 'Champagne Gold Traditional',
       description:
-        'A rich palette pairing Burgundy with champagne gold accents for a luxurious, regal aesthetic.',
+        'Cream and champagne tones with a soft gele. A classic, regal traditional look for the church service.',
     },
     {
-      image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80',
-      category: 'STYLE INSPIRATION',
-      title: 'Modern Dinner Gala',
+      image: '/images/style-inspiration-2.jpg',
+      category: 'CONTEMPORARY STYLE',
+      title: 'Modern Chic Celebration',
       description:
-        'Non-traditional tailoring meets sharp contemporary silhouettes for an unforgettable evening look.',
+        'A modern couple in deep green and warm rust tones, perfectly paired with our burgundy palette.',
     },
   ],
 
@@ -90,7 +90,6 @@ export const weddingData = {
   ],
 
   wishlist: [
-    ,
     {
       id: 1,
       image: null,
@@ -127,7 +126,7 @@ export const weddingData = {
     {
       question: 'Are the ceremony and reception happening in the same venue?',
       answer:
-        'No, the church ceremony and reception are at different locations. The church ceremony is at Celebration Church, and the reception is at Excellence Hotel. Directions for both are provided above.',
+        'No, the church ceremony and reception are at different locations. The church ceremony is at RCCG, Chapel of Mercy in Ketu, and the reception is at Adela Hall in Oregun. Directions for both are provided above.',
     },
     {
       question: 'Is the wedding indoors or outdoors?',
@@ -142,11 +141,11 @@ export const weddingData = {
   ],
 
   gallery: [
-    'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
-    'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=600&q=80',
-    'https://images.unsplash.com/photo-1606216794079-73f85bbd57d5?w=600&q=80',
-    'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&q=80',
-    'https://images.unsplash.com/photo-1621701583329-033f28a84ce7?w=600&q=80',
-    'https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=600&q=80',
-  ],
-};
+  '/images/gallery1.jpeg',
+  '/images/gallery2.jpeg',
+  '/images/gallery 3.jpeg',
+  '/images/gallery5.jpeg',
+  '/images/gallery6.jpeg',
+  '/images/gallery7.jpeg',
+],
+}

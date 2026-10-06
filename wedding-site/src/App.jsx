@@ -14,7 +14,9 @@ import MusicPlayer from './components/MusicPlayer';
 
 export default function App() {
   return (
-    <div className="bg-brand-cream min-h-screen text-[#F9F9F1] font-sans">
+    <div className="bg-transparent min-h-screen text-brand-espresso font-sans">
+      {/* Floral invitation backdrop, painted behind everything. */}
+      <div className="site-backdrop" aria-hidden="true" />
       <Header />
       <Hero />
       <Countdown />
