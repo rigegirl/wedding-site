@@ -79,7 +79,7 @@ export const weddingData = {
       bank: 'First Bank',
       type: 'DIRECT BANK TRANSFER',
       accountName: 'Faith Ige',
-      accountNumber: 'XXXXXXXXXX',
+      accountNumber: '3102046383',
     },
     {
       bank: 'Providus Bank',
@@ -140,12 +140,12 @@ export const weddingData = {
     },
   ],
 
-  gallery: [
+ gallery: [
+  '/images/gallery7.jpeg',
+  '/images/gallery5.jpeg',
   '/images/gallery1.jpeg',
   '/images/gallery2.jpeg',
   '/images/gallery 3.jpeg',
-  '/images/gallery5.jpeg',
   '/images/gallery6.jpeg',
-  '/images/gallery7.jpeg',
 ],
 }

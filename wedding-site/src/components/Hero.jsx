@@ -1,21 +1,43 @@
+import { useEffect, useState } from 'react';
 import { weddingData } from '../data/weddingData';
 import { MapPin, ChevronDown } from 'lucide-react';
-import heroImage from '../assets/hero1.png';
+
+import hero1 from '../assets/hero1.png';
+import hero2 from '../assets/hero2.png';
+import hero3 from '../assets/hero3.png';
+
+const heroImages = [hero1, hero2, hero3];
 
 export default function Hero() {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((current) => (current + 1) % heroImages.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section
       id="welcome"
       className="relative min-h-[70vh] pt-20 lg:min-h-[85vh] flex items-center justify-center overflow-hidden"
       style={{ scrollMarginTop: '100px' }}
     >
-      {/* Background */}
+      {/* Background Slideshow */}
       <div className="absolute inset-0 bg-brand-black">
-        <img
-         src={heroImage}
-          alt="Wedding couple"
-          className="w-full h-full object-cover opacity-40"
-        />
+        {heroImages.map((image, index) => (
+          <img
+            key={image}
+            src={image}
+            alt="Wedding couple"
+           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out ${
+  currentImage === index ? 'opacity-40' : 'opacity-0'
+}`}
+          />
+        ))}
+
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
       </div>
 
@@ -25,10 +47,11 @@ export default function Hero() {
           We joyfully invite you to our wedding
         </p>
 
-<h1
-  className="font-script text-5xl sm:text-6xl lg:text-8xl mb-8"
-  style={{ color: '#F9F9F1' }}
->          {weddingData.couple.partner1} & {weddingData.couple.partner2}
+        <h1
+          className="font-script text-5xl sm:text-6xl lg:text-8xl mb-8"
+          style={{ color: '#F9F9F1' }}
+        >
+          {weddingData.couple.partner1} & {weddingData.couple.partner2}
         </h1>
 
         <div className="flex items-center justify-center gap-2 text-[#F9F9F1]/80 mb-4">
