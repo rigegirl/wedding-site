@@ -53,7 +53,7 @@ export const weddingData = {
       name: 'Champagne Gold',
       hex: '#A68052',
       image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80',
-      fallbackGradient: 'linear-gradient(135deg, #3f3b0a 0%, #837b10 50%, #A68052 100%)',
+      fallbackGradient: 'linear-gradient(135deg, #fae5a1 0%, #ffdd6c 80%, #e4c359 100%)',
     },
   ],
 
@@ -63,14 +63,14 @@ export const weddingData = {
       category: 'TRADITIONAL WEDDING',
       title: 'Champagne Gold Traditional',
       description:
-        'Cream and champagne tones with a soft gele. A classic, regal traditional look for the church service.',
+        'Look Elegant in any Traditional Attire'
     },
     {
       image: '/images/style-inspiration-2.jpg',
       category: 'CONTEMPORARY STYLE',
       title: 'Modern Chic Celebration',
       description:
-        'A modern couple in deep green and warm rust tones, perfectly paired with our burgundy palette.',
+        'Dress Corporate with any touch of our Wedding COlours.',
     },
   ],
 
@@ -85,7 +85,7 @@ export const weddingData = {
       bank: 'Providus Bank',
       type: 'DIRECT BANK TRANSFER',
       accountName: 'Babalola Oluwadunsin',
-      accountNumber: 'XXXXXXXXXX',
+      accountNumber: '0006713114',
     },
   ],
 
@@ -106,7 +106,7 @@ export const weddingData = {
     {
       question: "What's the RSVP deadline?",
       answer:
-        'Please RSVP by October 10th, 2026. This helps us plan seating and catering accurately.',
+        'Please RSVP by October 17th, 2026. This helps us plan seating and catering accurately.',
     },
     {
       question: 'Can I bring a guest?',

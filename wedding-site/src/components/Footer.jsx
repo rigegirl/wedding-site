@@ -19,7 +19,7 @@ export default function Footer() {
       <div className="max-w-[800px] mx-auto text-center">
         {/* Monogram */}
         <div className="w-[80px] h-[80px] rounded-full border-2 border-brand-gold/40 flex items-center justify-center mx-auto mb-12">
-          <span className="font-script text-[#F9F9F1] text-3xl">O&O</span>
+          <span className="font-script text-[#F9F9F1] text-3xl">TheBabalolas</span>
         </div>
 
         <p className="font-serif text-3xl lg:text-4xl text-[#F9F9F1]/90 mb-6">

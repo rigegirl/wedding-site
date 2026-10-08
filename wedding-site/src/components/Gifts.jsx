@@ -38,7 +38,17 @@ export default function Gifts() {
           <p className="text-brand-taupe text-sm leading-relaxed max-w-lg mx-auto">
             Your presence at our wedding is the greatest gift of all.
           </p>
-        </div>
+<div className="flex justify-center mt-8 mb-12">
+  <div className="w-80 h-80 sm:w-68 sm:h-68 rounded-full overflow-hidden shadow-[0_15px_40px_rgba(20,17,12,0.10)]">
+    <img
+      src="/images/gallery4blur.jpeg"
+      alt="Faith and Dunsin"
+      className="w-full h-full object-cover block"
+    />
+  </div>
+</div>
+</div>
+
 
         {/* Bank Transfer Cards */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">

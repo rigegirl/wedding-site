@@ -165,10 +165,10 @@ export default function SaveTheDate() {
         {/* Venue Card */}
         <div className="relative bg-brand-black rounded-3xl overflow-hidden shadow-[0_15px_40px_rgba(20,17,12,0.15)] text-[#F9F9F1]">
           <img
-            src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&q=80"
-            alt="Venue"
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
-          />
+  src="/images/venue.jpeg"
+  alt="Venue"
+  className="absolute inset-0 w-full h-full object-cover opacity-30"
+/>
           <div className="relative z-10 p-10 lg:p-14">
             <div className="flex items-center gap-2 mb-8">
               <MapPin size={16} className="text-brand-gold-light" />
