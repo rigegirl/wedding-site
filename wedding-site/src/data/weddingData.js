@@ -45,9 +45,9 @@ export const weddingData = {
   colours: [
     {
       name: 'Burgundy',
-      hex: '#3D0734',
+      hex: '#800000',
       image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1200&q=80',
-      fallbackGradient: 'linear-gradient(135deg, #75074B 0%, #4a0330 50%, #3d0734 100%)',
+      fallbackGradient: 'linear-gradient(135deg, #800000 0%, #800000 50%, #800000 100%)',
     },
     {
       name: 'Champagne Gold',
