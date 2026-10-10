@@ -41,7 +41,7 @@ export default function Gifts() {
 <div className="flex justify-center mt-8 mb-12">
   <div className="w-80 h-80 sm:w-68 sm:h-68 rounded-full overflow-hidden shadow-[0_15px_40px_rgba(20,17,12,0.10)]">
     <img
-      src="/images/gallery4blur.jpeg"
+      src="/images/gallery11.jpeg"
       alt="Faith and Dunsin"
       className="w-full h-full object-cover block"
     />

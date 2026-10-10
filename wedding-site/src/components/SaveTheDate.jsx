@@ -165,7 +165,7 @@ export default function SaveTheDate() {
         {/* Venue Card */}
         <div className="relative bg-brand-black rounded-3xl overflow-hidden shadow-[0_15px_40px_rgba(20,17,12,0.15)] text-[#F9F9F1]">
           <img
-  src="/images/venue.jpeg"
+  src="/images/gallery8.png"
   alt="Venue"
   className="absolute inset-0 w-full h-full object-cover opacity-30"
 />

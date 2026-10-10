@@ -51,22 +51,22 @@ export const weddingData = {
     },
     {
       name: 'Champagne Gold',
-      hex: '#A68052',
+      hex: '#d29f51',
       image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80',
-      fallbackGradient: 'linear-gradient(135deg, #fae5a1 0%, #ffdd6c 80%, #e4c359 100%)',
+      fallbackGradient: 'linear-gradient(135deg, #d29f51 0%, #d29f51 80%, #e4c359 100%)',
     },
   ],
 
   styleInspiration: [
     {
-      image: '/images/style-inspiration-1.jpg',
+      image: '/images/gallery10.jfif',
       category: 'TRADITIONAL WEDDING',
       title: 'Champagne Gold Traditional',
       description:
         'Look Elegant in any Traditional Attire'
     },
     {
-      image: '/images/style-inspiration-2.jpg',
+      image: '/images/gallery9.jfif',
       category: 'CONTEMPORARY STYLE',
       title: 'Modern Chic Celebration',
       description:
@@ -82,7 +82,7 @@ export const weddingData = {
       accountNumber: '3102046383',
     },
     {
-      bank: 'Providus Bank',
+      bank: 'Union Bank',
       type: 'DIRECT BANK TRANSFER',
       accountName: 'Babalola Oluwadunsin',
       accountNumber: '0006713114',

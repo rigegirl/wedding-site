@@ -78,39 +78,29 @@ export default function RSVP() {
     setSubmitting(true);
 
     try {
-      const formData = new FormData();
+     
+const response = await fetch(
+  'https://script.google.com/macros/s/AKfycbyTLYyckr_HIbC4YjVA1P-kRACGl_nA9hg1mmHjbjJzlmJz2XfN26c4o1GzmCYCHsyJ/exec',
+  {
+    method: 'POST',
+    body: JSON.stringify({
+      inviteCode: form.inviteCode,
+      firstName: form.firstName,
+      lastName: form.lastName,
+      email: form.email,
+      attendance: form.attendance,
+      message: form.message,
+    }),
+  }
+);
 
-      formData.append('inviteCode', form.inviteCode);
-      formData.append('firstName', form.firstName);
-      formData.append('lastName', form.lastName);
-      formData.append('email', form.email);
-      formData.append(
-        'attendance',
-        form.attendance === true
-          ? "Yes, I'll be there"
-          : "No, I can't make it"
-      );
-      formData.append('message', form.message);
+const result = await response.json();
 
-      const response = await fetch('https://formspree.io/f/xppqdlrw', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        const errorMessage =
-          result?.errors
-            ?.map((error) => error.message)
-            .join(', ') ||
-          'We could not submit your RSVP. Please try again.';
-
-        throw new Error(errorMessage);
-      }
+if (!result.success) {
+  throw new Error(
+    result.message || 'We could not submit your RSVP. Please try again.'
+  );
+}
 
       setSubmitted(true);
     } catch (error) {
