@@ -45,9 +45,9 @@ export const weddingData = {
   colours: [
     {
       name: 'Burgundy',
-      hex: '#800000',
+      hex: '#660033',
       image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1200&q=80',
-      fallbackGradient: 'linear-gradient(135deg, #800000 0%, #800000 50%, #800000 100%)',
+      fallbackGradient: 'linear-gradient(135deg, #660033 0%, #660033 50%, #660033 100%)',
     },
     {
       name: 'Champagne Gold',
@@ -142,10 +142,12 @@ export const weddingData = {
 
  gallery: [
   '/images/gallery7.jpeg',
-  '/images/gallery5.jpeg',
-  '/images/gallery1.jpeg',
-  '/images/gallery2.jpeg',
+   '/images/gallery13.jpeg',
+   '/images/gallery5.jpeg',
+  '/images/gallery17.jpeg',
   '/images/gallery 3.jpeg',
+  '/images/gallery12.jpeg',
+  '/images/gallery2.jpeg',
   '/images/gallery6.jpeg',
 ],
 }
