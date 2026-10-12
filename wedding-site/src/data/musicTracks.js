@@ -5,7 +5,7 @@ export const musicTracks = [
     title: 'Here for You',
     composer: 'JayMikee',
     performer: 'JayMikee featuring TeeMikee',
-    src: '/music/here-for-you.mp3',
+   src: '/here-for-you.mp3',
     mood: 'Romantic, heartfelt',
     moment: 'Wedding background music',
   },

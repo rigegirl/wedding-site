@@ -1,19 +1,19 @@
+
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Volume2, VolumeX, SkipForward, SkipBack, Music, X } from 'lucide-react';
+import {
+  Music2,
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  VolumeX,
+  ChevronDown,
+  ChevronUp,
+} from 'lucide-react';
+
 import { musicTracks, musicCredits } from '../data/musicTracks';
 
-/**
- * Ambient music player.
- *
- * AUTOPLAY: every modern browser blocks unmuted audio until a real user gesture,
- * and iOS Safari additionally requires that gesture to land on the element that
- * will actually play. So we never attempt autoplay on load — the listener taps
- * the button first. We start at a moderate volume — audible across the room for
- * the ceremony, but not a surprise blast — and the listener can mute at any time.
- *
- * Track switching only resumes playback if the user had already opted in, so
- * changing tracks never starts sound on its own.
- */
 export default function MusicPlayer() {
   const [open, setOpen] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -27,223 +27,246 @@ export default function MusicPlayer() {
 
   const track = musicTracks[index];
 
-  // Functional update so rapid next/prev taps can never race a stale closure.
   const changeTrack = useCallback((direction) => {
-    const delta = direction === 'next' ? 1 : -1;
-    setIndex((i) => (i + delta + musicTracks.length) % musicTracks.length);
+    setIndex((current) => {
+      const total = musicTracks.length;
+      return (current + direction + total) % total;
+    });
   }, []);
 
-  // Create the single <audio> element once and reuse it for every track.
+  // Create the audio player once.
   useEffect(() => {
     const audio = new Audio();
+
     audio.loop = true;
-    audio.preload = 'none';
+    audio.preload = 'auto';
     audio.volume = 0.6;
+
     audioRef.current = audio;
+
+    const handlePlay = () => {
+      setPlaying(true);
+      setError(false);
+    };
+
+    const handlePause = () => setPlaying(false);
+
+    const handleError = () => {
+      setPlaying(false);
+      setError(true);
+    };
+
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+    audio.addEventListener('error', handleError);
+
     return () => {
       audio.pause();
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('error', handleError);
       audio.src = '';
       audioRef.current = null;
     };
   }, []);
 
-  // Mirror real playback state so the UI can never claim to be playing when it isn't.
+  // Load the selected track and attempt autoplay on page load.
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
-    const onPlay = () => setPlaying(true);
-    const onPause = () => setPlaying(false);
-    const onError = () => {
-      setError(true);
-      setPlaying(false);
-    };
-    audio.addEventListener('play', onPlay);
-    audio.addEventListener('pause', onPause);
-    audio.addEventListener('error', onError);
-    return () => {
-      audio.removeEventListener('play', onPlay);
-      audio.removeEventListener('pause', onPause);
-      audio.removeEventListener('error', onError);
-    };
-  }, []);
+    if (!audio || !track?.src) return;
 
-  // Load whichever track is selected.
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
     setError(false);
     audio.src = track.src;
-    if (userOptedInRef.current) {
-      audio.currentTime = 0;
-      const attempt = audio.play();
-      if (attempt?.catch) attempt.catch(() => setError(true));
-    }
-  }, [index, track.src]);
+    audio.load();
 
-  const play = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    setError(false);
-    if (!audio.src) audio.src = track.src;
-    userOptedInRef.current = true;
-
-    // play() can still be rejected if the element was created outside the
-    // originating task. Retrying synchronously is the standard escape hatch.
     const attempt = audio.play();
-    if (attempt?.catch) {
-      attempt.catch(async () => {
-        try {
-          await audio.play();
-        } catch {
-          setError(true);
-        }
-      });
+
+    if (attempt && typeof attempt.then === 'function') {
+      attempt
+        .then(() => {
+          userOptedInRef.current = true;
+        })
+        .catch(() => {
+          // Some browsers block autoplay until the visitor interacts.
+          setPlaying(false);
+        });
+    }
+  }, [index, track?.src]);
+
+  // Keep mute state in sync with the audio element.
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) audio.muted = muted;
+  }, [muted]);
+
+  const play = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      userOptedInRef.current = true;
+      setError(false);
+
+      if (!audio.src && track?.src) {
+        audio.src = track.src;
+        audio.load();
+      }
+
+      await audio.play();
+    } catch {
+      setPlaying(false);
+      setError(true);
+    }
+  }, [track]);
+
+  const pause = useCallback(() => {
+    userOptedInRef.current = false;
+    audioRef.current?.pause();
+  }, []);
+
+  const togglePlay = () => {
+    if (playing) {
+      pause();
+    } else {
+      play();
     }
   };
 
-  const pause = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    userOptedInRef.current = false;
-    audio.pause();
-  };
-
-  const toggle = () => (playing ? pause() : play());
-
-  const toggleMute = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.muted = !audio.muted;
-    setMuted(audio.muted);
-  };
+  if (!track) return null;
 
   return (
-    <>
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-6 left-6 z-50 w-11 h-11 rounded-full bg-brand-black/90 backdrop-blur-md flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.25)] hover:bg-brand-black transition-colors"
-        aria-label={open ? 'Close music panel' : 'Open music player'}
-        aria-expanded={open}
-      >
-        {open ? (
-          <X size={15} className="text-brand-gold" />
-        ) : (
-          <Music size={15} className={playing ? 'text-brand-gold' : 'text-brand-cream/50'} />
-        )}
-      </button>
-
-      {open && (
-        <div className="fixed bottom-20 left-6 z-50 w-[min(320px,calc(100vw-3rem))] rounded-2xl bg-brand-black/95 backdrop-blur-xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] p-5">
-          <div className="flex items-start justify-between gap-3 mb-5">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-full bg-brand-wine/25 border border-brand-gold/30 flex items-center justify-center shrink-0">
-                <Music size={14} className="text-brand-gold" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-brand-gold-light text-[10px] tracking-[0.25em] uppercase mb-1">
-                  Now playing
-                </p>
-                <p className="font-serif text-brand-cream text-base leading-tight truncate">
-                  {track.title}
-                </p>
-                <p className="text-[11px] text-brand-cream/50 truncate">{track.composer}</p>
-              </div>
-            </div>
-            <button
-              onClick={() => setOpen(false)}
-              className="text-brand-cream/40 hover:text-brand-cream transition-colors shrink-0"
-              aria-label="Close music panel"
-            >
-              <X size={16} />
-            </button>
-          </div>
-
-          <div className="flex items-center justify-center gap-4 mb-5">
-            <button
-              onClick={() => changeTrack('prev')}
-              className="text-brand-cream/50 hover:text-brand-gold transition-colors"
-              aria-label="Previous track"
-            >
-              <SkipBack size={16} />
-            </button>
-            <button
-              onClick={toggle}
-              className="w-11 h-11 rounded-full border border-brand-gold/40 flex items-center justify-center hover:bg-brand-gold/10 transition-colors"
-              aria-label={playing ? 'Pause music' : 'Play music'}
-            >
-              {playing ? (
-                <Volume2 size={15} className="text-brand-gold" />
-              ) : (
-                <VolumeX size={15} className="text-brand-cream/60" />
-              )}
-            </button>
-            <button
-              onClick={() => changeTrack('next')}
-              className="text-brand-cream/50 hover:text-brand-gold transition-colors"
-              aria-label="Next track"
-            >
-              <SkipForward size={16} />
-            </button>
-            <button
-              onClick={toggleMute}
-              className="ml-1 text-[10px] tracking-[0.2em] uppercase text-brand-cream/40 hover:text-brand-cream transition-colors"
-              aria-label={muted ? 'Unmute' : 'Mute'}
-            >
-              {muted ? 'Unmute' : 'Mute'}
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between text-[10px] text-brand-cream/35 mb-1">
-            <span className="tracking-[0.2em] uppercase">Ambience</span>
-            <span>{track.bpm} BPM</span>
-          </div>
-          <p className="text-[11px] text-brand-cream/45 leading-relaxed mb-4">
-            {track.mood} · {track.moment}
-          </p>
-
+    <div className="fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] max-w-xs">
+      <div className="overflow-hidden rounded-2xl border border-brand-gold/30 bg-brand-dark/95 text-brand-cream shadow-2xl backdrop-blur-md">
+        <div className="flex items-center gap-3 p-3">
           <button
-            onClick={() => setCreditsOpen((c) => !c)}
-            className="w-full text-left text-[10px] tracking-[0.2em] uppercase text-brand-cream/30 hover:text-brand-gold transition-colors border-t border-white/10 pt-3"
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-label={open ? 'Collapse music player' : 'Expand music player'}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold"
           >
-            {creditsOpen ? 'Hide music credits' : 'Music credits'}
+            <Music2 size={21} />
           </button>
 
-          {creditsOpen && (
-            <div className="mt-3 text-[11px] text-brand-cream/45 leading-relaxed">
-              <p className="mb-2">{musicCredits.statement}</p>
-              <ul className="space-y-1 mb-3">
-                {musicTracks.map((t) => (
-                  <li key={t.id}>
-                    <span className="text-brand-cream/70">{t.title}</span> —{' '}
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            className="min-w-0 flex-1 text-left"
+          >
+            <p className="truncate text-sm font-semibold">
+              {track.title}
+            </p>
+            <p className="truncate text-xs text-brand-cream/60">
+              {track.performer || track.composer}
+            </p>
+          </button>
+
+          <button
+            type="button"
+            onClick={togglePlay}
+            aria-label={playing ? 'Pause music' : 'Play music'}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-gold text-brand-dark transition hover:opacity-90"
+          >
+            {playing ? <Pause size={19} /> : <Play size={19} />}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-label={open ? 'Hide music controls' : 'Show music controls'}
+            className="text-brand-cream/70 transition hover:text-brand-cream"
+          >
+            {open ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
+          </button>
+        </div>
+
+        {open && (
+          <div className="border-t border-brand-cream/10 px-4 pb-4 pt-3">
+            <p className="mb-1 text-sm font-medium">{track.title}</p>
+            <p className="mb-3 text-xs leading-relaxed text-brand-cream/60">
+              {track.mood} · {track.moment}
+            </p>
+
+            <div className="flex items-center justify-center gap-5">
+              <button
+                type="button"
+                onClick={() => changeTrack(-1)}
+                aria-label="Previous track"
+                disabled={musicTracks.length < 2}
+                className="text-brand-cream/80 transition hover:text-brand-gold disabled:opacity-40"
+              >
+                <SkipBack size={19} />
+              </button>
+
+              <button
+                type="button"
+                onClick={togglePlay}
+                aria-label={playing ? 'Pause music' : 'Play music'}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-gold text-brand-dark transition hover:opacity-90"
+              >
+                {playing ? <Pause size={20} /> : <Play size={20} />}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => changeTrack(1)}
+                aria-label="Next track"
+                disabled={musicTracks.length < 2}
+                className="text-brand-cream/80 transition hover:text-brand-gold disabled:opacity-40"
+              >
+                <SkipForward size={19} />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setMuted((value) => !value)}
+                aria-label={muted ? 'Unmute music' : 'Mute music'}
+                className="text-brand-cream/80 transition hover:text-brand-gold"
+              >
+                {muted ? <VolumeX size={19} /> : <Volume2 size={19} />}
+              </button>
+            </div>
+
+            {error && (
+              <p className="mt-3 text-center text-xs text-red-300">
+                The song could not be loaded. Check that the audio file
+                exists in public/music, then try playing it again.
+              </p>
+            )}
+
+            <div className="mt-3 border-t border-brand-cream/10 pt-3">
+              <button
+                type="button"
+                onClick={() => setCreditsOpen((value) => !value)}
+                className="flex w-full items-center justify-between text-left text-xs text-brand-cream/60 transition hover:text-brand-gold"
+              >
+                <span>Song credits</span>
+                {creditsOpen ? (
+                  <ChevronUp size={15} />
+                ) : (
+                  <ChevronDown size={15} />
+                )}
+              </button>
+
+              {creditsOpen && (
+                <div className="mt-3 text-[11px] leading-relaxed text-brand-cream/60">
+                  <p className="mb-2">{musicCredits.statement}</p>
+
+                  {musicCredits.performerUrl && (
                     <a
-                      href={t.licenseUrl}
+                      href={musicCredits.performerUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline hover:text-brand-gold transition-colors"
+                      className="underline transition hover:text-brand-gold"
                     >
-                      {t.license}
+                      View song source
                     </a>
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={musicCredits.performerUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-brand-gold transition-colors"
-              >
-                Performances by Kevin MacLeod
-              </a>
+                  )}
+                </div>
+              )}
             </div>
-          )}
-
-          {error && (
-            <p className="mt-3 text-[11px] text-brand-cream/40">
-              This track could not be loaded. Please try again.
-            </p>
-          )}
-        </div>
-      )}
-    </>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
