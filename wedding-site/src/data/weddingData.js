@@ -34,7 +34,7 @@ export const weddingData = {
     },
     {
       time: '1:00 PM',
-      title: 'Engagement Ceremony & Reception',
+      title: 'Reception',
       subtitle: 'Traditional Ceremony, Speeches & Celebration',
       description:
         'Grand entrance of the bridal party, couple first dance, reception, toasts, and cake cutting.',

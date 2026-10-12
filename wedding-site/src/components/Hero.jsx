@@ -6,7 +6,18 @@ import hero1 from '../assets/hero1.png';
 import hero2 from '../assets/hero2.png';
 import hero3 from '../assets/hero3.png';
 
-const heroImages = [hero1, hero2, hero3];
+import gallery14 from '../assets/gallery14.png';
+import gallery15 from '../assets/gallery15.png';
+import gallery16 from '../assets/gallery16.png';
+
+const heroImages = [
+  hero1,
+  gallery16,
+  hero3,
+  gallery14,
+  hero2,
+  gallery15,
+];
 
 export default function Hero() {
   const [currentImage, setCurrentImage] = useState(0);
