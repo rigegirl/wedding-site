@@ -25,7 +25,7 @@ export const weddingData = {
 
   programme: [
     {
-      time: '10:00 AM',
+      time: '11:00 AM',
       title: 'Church Wedding',
       subtitle: 'Holy Matrimony Before God',
       description:
