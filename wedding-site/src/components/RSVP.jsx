@@ -80,7 +80,7 @@ export default function RSVP() {
     try {
      
 const response = await fetch(
-  'https://script.google.com/macros/s/AKfycbyTLYyckr_HIbC4YjVA1P-kRACGl_nA9hg1mmHjbjJzlmJz2XfN26c4o1GzmCYCHsyJ/exec',
+  'https://script.google.com/macros/s/AKfycbzUGb-ZBq_bdHCgJs4lM83tM9dEbzpUXflxTyRHdCDhTfoLyfpsp0JeDgacjIIQPo06/exec',
   {
     method: 'POST',
     body: JSON.stringify({
