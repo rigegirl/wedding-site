@@ -106,7 +106,7 @@ export const weddingData = {
     {
       question: "What's the RSVP deadline?",
       answer:
-        'Please RSVP by October 17th, 2026. This helps us plan seating and catering accurately.',
+        'Please RSVP by October 30th, 2026. This helps us plan seating and catering accurately.',
     },
     {
       question: 'Can I bring a guest?',
