@@ -24,7 +24,6 @@ export default function MusicPlayer() {
 
   const audioRef = useRef(null);
   const userOptedInRef = useRef(false);
-
   const track = musicTracks[index];
 
   const changeTrack = useCallback((direction) => {
@@ -34,14 +33,11 @@ export default function MusicPlayer() {
     });
   }, []);
 
-  // Create the audio player once.
   useEffect(() => {
     const audio = new Audio();
-
     audio.loop = true;
     audio.preload = 'auto';
     audio.volume = 0.6;
-
     audioRef.current = audio;
 
     const handlePlay = () => {
@@ -70,7 +66,6 @@ export default function MusicPlayer() {
     };
   }, []);
 
-  // Load the selected track and attempt autoplay on page load.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !track?.src) return;
@@ -79,21 +74,13 @@ export default function MusicPlayer() {
     audio.src = track.src;
     audio.load();
 
-    const attempt = audio.play();
-
-    if (attempt && typeof attempt.then === 'function') {
-      attempt
-        .then(() => {
-          userOptedInRef.current = true;
-        })
-        .catch(() => {
-          // Some browsers block autoplay until the visitor interacts.
-          setPlaying(false);
-        });
-    }
+    audio.play().then(() => {
+      userOptedInRef.current = true;
+    }).catch(() => {
+      setPlaying(false);
+    });
   }, [index, track?.src]);
 
-  // Keep mute state in sync with the audio element.
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) audio.muted = muted;
@@ -125,24 +112,21 @@ export default function MusicPlayer() {
   }, []);
 
   const togglePlay = () => {
-    if (playing) {
-      pause();
-    } else {
-      play();
-    }
+    if (playing) pause();
+    else play();
   };
 
   if (!track) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-[calc(100%-2rem)] max-w-xs">
+    <div className="fixed top-[92px] right-3 sm:top-auto sm:bottom-4 sm:right-4 z-[55] w-[calc(100%-1.5rem)] max-w-xs">
       <div className="overflow-hidden rounded-2xl border border-brand-gold/30 bg-brand-dark/95 text-brand-cream shadow-2xl backdrop-blur-md">
-        <div className="flex items-center gap-3 p-3">
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3">
           <button
             type="button"
             onClick={() => setOpen((value) => !value)}
             aria-label={open ? 'Collapse music player' : 'Expand music player'}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold"
           >
             <Music2 size={21} />
           </button>
@@ -152,9 +136,7 @@ export default function MusicPlayer() {
             onClick={() => setOpen((value) => !value)}
             className="min-w-0 flex-1 text-left"
           >
-            <p className="truncate text-sm font-semibold">
-              {track.title}
-            </p>
+            <p className="truncate text-sm font-semibold">{track.title}</p>
             <p className="truncate text-xs text-brand-cream/60">
               {track.performer || track.composer}
             </p>
@@ -164,9 +146,9 @@ export default function MusicPlayer() {
             type="button"
             onClick={togglePlay}
             aria-label={playing ? 'Pause music' : 'Play music'}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-gold text-brand-dark transition hover:opacity-90"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-gold text-brand-dark transition hover:opacity-90"
           >
-            {playing ? <Pause size={19} /> : <Play size={19} />}
+            {playing ? <Pause size={18} /> : <Play size={18} />}
           </button>
 
           <button

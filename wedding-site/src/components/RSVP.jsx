@@ -2,154 +2,227 @@ import { useState } from 'react';
 import { weddingData } from '../data/weddingData';
 import { Key, Send, CircleCheck } from 'lucide-react';
 
-const WEDDING_INVITE_CODE = '74921';
+const GROUP_CODES = {
+  DLF726: "Daddy's legal friends/colleagues",
+  HUTMOL26: 'HUTMOL Magodo',
+  LP21L26: 'LP 21 Leaders Group',
+  DADFAM26: "Daddy's family",
+  MUMFAM26: "Mummy's family",
+  MUCOL726: "Mummy's colleagues",
+  COMMEM26: 'Chapel of Mercy members',
+  COMMIN26: 'COM (Ministers)',
+  '74921': 'General Invitation',
+};
+
+const RSVP_ENDPOINT =
+  'https://script.google.com/macros/s/AKfycbyTLYyckr_HIbC4YjVA1P-kRACGl_nA9hg1mmHjbjJzlmJz2XfN26c4o1GzmCYCHsyJ/exec';
+
+const initialForm = {
+  inviteCode: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  attendance: null,
+  attendingWith: 'self',
+  spouseFirstName: '',
+  spouseLastName: '',
+  spouseAttendance: null,
+  message: '',
+};
 
 export default function RSVP() {
-  const [form, setForm] = useState({
-    inviteCode: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    attendance: null,
-    message: '',
-  });
-
+  const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [inviteVerified, setInviteVerified] = useState(false);
+  const [guestGroup, setGuestGroup] = useState('');
 
   const verifyInviteCode = () => {
-    if (form.inviteCode !== WEDDING_INVITE_CODE) {
-      setErrors((e) => ({
-        ...e,
+    const code = form.inviteCode.trim().toUpperCase();
+    const group = GROUP_CODES[code];
+
+    if (!group) {
+      setErrors((previous) => ({
+        ...previous,
         inviteCode:
-          'Incorrect invite code. Please check your invitation and try again.',
+          'This invitation code is not recognised. Please check your invitation.',
       }));
       setInviteVerified(false);
+      setGuestGroup('');
       return;
     }
 
-    setErrors((e) => ({
-      ...e,
+    setErrors((previous) => ({
+      ...previous,
       inviteCode: undefined,
     }));
 
+    setForm((previous) => ({
+      ...previous,
+      inviteCode: code,
+    }));
+
+    setGuestGroup(group);
     setInviteVerified(true);
   };
 
+  const update = (field, value) => {
+    setForm((previous) => ({
+      ...previous,
+      [field]: value,
+    }));
+
+    if (errors[field]) {
+      setErrors((previous) => ({
+        ...previous,
+        [field]: undefined,
+      }));
+    }
+
+    if (field === 'inviteCode') {
+      setInviteVerified(false);
+      setGuestGroup('');
+    }
+  };
+
   const validate = () => {
-    const errs = {};
+    const nextErrors = {};
 
     if (!inviteVerified) {
-      errs.inviteCode = 'Please verify your invite code first';
+      nextErrors.inviteCode = 'Please verify your invitation code first.';
     }
 
     if (!form.firstName.trim()) {
-      errs.firstName = 'First name is required';
+      nextErrors.firstName = 'First name is required.';
     }
 
     if (!form.lastName.trim()) {
-      errs.lastName = 'Last name is required';
+      nextErrors.lastName = 'Last name is required.';
     }
 
     if (
       !form.email.trim() ||
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
     ) {
-      errs.email = 'Please enter a valid email';
+      nextErrors.email = 'Please enter a valid email address.';
     }
 
     if (form.attendance === null) {
-      errs.attendance = 'Please select your attendance';
+      nextErrors.attendance = 'Please select your attendance.';
     }
 
-    return errs;
+    if (form.attendingWith === 'spouse') {
+      if (!form.spouseFirstName.trim()) {
+        nextErrors.spouseFirstName = "Your spouse's first name is required.";
+      }
+
+      if (!form.spouseLastName.trim()) {
+        nextErrors.spouseLastName = "Your spouse's last name is required.";
+      }
+
+      if (form.spouseAttendance === null) {
+        nextErrors.spouseAttendance =
+          "Please select your spouse's attendance.";
+      }
+    }
+
+    return nextErrors;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    const errs = validate();
-    setErrors(errs);
+    const validationErrors = validate();
+    setErrors(validationErrors);
 
-    if (Object.keys(errs).length > 0) return;
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
 
     setSubmitting(true);
 
     try {
-     
-const response = await fetch(
-  'https://script.google.com/macros/s/AKfycbzUGb-ZBq_bdHCgJs4lM83tM9dEbzpUXflxTyRHdCDhTfoLyfpsp0JeDgacjIIQPo06/exec',
-  {
-    method: 'POST',
-    body: JSON.stringify({
-      inviteCode: form.inviteCode,
-      firstName: form.firstName,
-      lastName: form.lastName,
-      email: form.email,
-      attendance: form.attendance,
-      message: form.message,
-    }),
-  }
-);
+      const payload = {
+        inviteCode: form.inviteCode,
+        group: guestGroup,
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        email: form.email.trim(),
+        attendance: form.attendance,
+        attendingWith: form.attendingWith,
+        spouseFirstName:
+          form.attendingWith === 'spouse'
+            ? form.spouseFirstName.trim()
+            : '',
+        spouseLastName:
+          form.attendingWith === 'spouse'
+            ? form.spouseLastName.trim()
+            : '',
+        spouseAttendance:
+          form.attendingWith === 'spouse'
+            ? form.spouseAttendance
+            : null,
+        message: form.message.trim(),
+      };
 
-const result = await response.json();
+      const response = await fetch(RSVP_ENDPOINT, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
 
-if (!result.success) {
-  throw new Error(
-    result.message || 'We could not submit your RSVP. Please try again.'
-  );
-}
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(
+          result.message || 'We could not submit your RSVP. Please try again.'
+        );
+      }
 
       setSubmitted(true);
     } catch (error) {
       console.error('RSVP submission error:', error);
 
-      setErrors({
+      setErrors((previous) => ({
+        ...previous,
         submit:
           error.message ||
           'We could not submit your RSVP. Please try again.',
-      });
+      }));
     } finally {
       setSubmitting(false);
     }
   };
 
-  const update = (field, value) => {
-    setForm((f) => ({ ...f, [field]: value }));
-
-    if (errors[field]) {
-      setErrors((e) => ({ ...e, [field]: undefined }));
-    }
-
-    if (field === 'inviteCode') {
-      setInviteVerified(false);
-    }
-  };
-
   const deadlineDate = new Date(
-    weddingData.rsvpDeadline
-  ).toLocaleDateString('en-US', {
-    month: 'long',
+    '2026-10-27T12:00:00'
+  ).toLocaleDateString('en-GB', {
     day: 'numeric',
+    month: 'long',
     year: 'numeric',
   });
+
+  const inputClasses = (field) =>
+    `w-full px-5 py-3.5 bg-white border ${
+      errors[field] ? 'border-red-400' : 'border-brand-border'
+    } rounded-xl text-sm text-brand-espresso placeholder:text-brand-gray/50 focus:outline-none focus:border-brand-gold transition-colors`;
+
+  const attendanceOptions = [
+    { value: true, label: "Yes, I'll be there" },
+    { value: false, label: "No, I can't make it" },
+  ];
 
   if (submitted) {
     return (
       <section
         id="rsvp"
-        className="py-24 lg:py-36 px-6"
+        className="px-6 py-24 lg:py-36"
         style={{ scrollMarginTop: '100px' }}
       >
         <div className="max-w-[600px] mx-auto text-center">
-          <div className="bg-white rounded-3xl border border-brand-border p-12 shadow-[0_15px_40px_rgba(20,17,12,0.06)]">
+          <div className="bg-white rounded-3xl border border-brand-border p-8 sm:p-12 shadow-[0_15px_40px_rgba(20,17,12,0.06)]">
             <div className="w-16 h-16 rounded-full bg-brand-pink flex items-center justify-center mx-auto mb-6">
-              <CircleCheck
-                size={32}
-                className="text-brand-green"
-              />
+              <CircleCheck size={32} className="text-brand-green" />
             </div>
 
             <h3 className="font-serif text-3xl text-brand-espresso mb-3">
@@ -157,7 +230,7 @@ if (!result.success) {
             </h3>
 
             <p className="text-brand-gray text-sm leading-relaxed">
-              Your RSVP has been received. We can&rsquo;t wait to celebrate
+              Your RSVP has been received. We can&apos;t wait to celebrate
               with you!
             </p>
           </div>
@@ -166,21 +239,13 @@ if (!result.success) {
     );
   }
 
-  const inputClasses = (field) =>
-    `w-full px-5 py-3.5 bg-white border ${
-      errors[field]
-        ? 'border-red-400'
-        : 'border-brand-border'
-    } rounded-xl text-sm text-brand-espresso placeholder:text-brand-gray/50 focus:outline-none focus:border-brand-gold transition-colors`;
-
   return (
     <section
       id="rsvp"
-      className="py-24 lg:py-36 px-6"
+      className="px-6 py-24 pb-28 lg:py-36"
       style={{ scrollMarginTop: '100px' }}
     >
       <div className="max-w-[650px] mx-auto">
-
         <div className="text-center mb-12">
           <p className="text-[11px] font-semibold tracking-[0.3em] text-brand-wine uppercase mb-4">
             JOIN OUR CELEBRATION
@@ -197,22 +262,19 @@ if (!result.success) {
           <div className="w-16 h-px bg-brand-border mx-auto mb-6" />
 
           <p className="text-sm text-brand-gray">
-            Kindly RSVP by{' '}
-            <strong className="text-brand-espresso">
-              {deadlineDate}
-            </strong>
+            Kindly RSVP before{' '}
+            <strong className="text-brand-espresso">{deadlineDate}</strong>
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-3xl border border-brand-border p-8 lg:p-12 shadow-[0_15px_40px_rgba(20,17,12,0.06)]"
+          className="bg-white rounded-3xl border border-brand-border p-6 sm:p-8 lg:p-12 shadow-[0_15px_40px_rgba(20,17,12,0.06)]"
         >
-
-          {/* Invite Code */}
+          {/* Invitation code */}
           <div className="mb-8 p-5 bg-brand-pink/60 rounded-2xl border border-brand-border">
             <label className="block text-[10px] font-semibold tracking-[0.2em] text-brand-espresso mb-2">
-              5-DIGIT INVITE CODE *
+              INVITATION CODE *
             </label>
 
             <div className="relative">
@@ -223,71 +285,61 @@ if (!result.success) {
 
               <input
                 type="text"
-                maxLength={5}
-                placeholder="E.G. 00000"
+                maxLength={12}
+                placeholder="Enter your invitation code"
                 value={form.inviteCode}
                 disabled={inviteVerified}
-                onChange={(e) =>
-                  update(
-                    'inviteCode',
-                    e.target.value.replace(/\D/g, '')
-                  )
+                onChange={(event) =>
+                  update('inviteCode', event.target.value.toUpperCase())
                 }
-                className={`${inputClasses('inviteCode')} pl-11 ${
-                  inviteVerified ? 'bg-brand-pink/30' : ''
-                }`}
+                className={`${inputClasses('inviteCode')} pl-11`}
+                autoComplete="off"
               />
             </div>
 
             {errors.inviteCode && (
-              <p className="text-red-500 text-xs mt-1">
+              <p className="text-red-500 text-xs mt-2">
                 {errors.inviteCode}
               </p>
             )}
 
             {!inviteVerified ? (
-              <>
-                <p className="text-[11px] text-brand-gray/60 mt-2">
-                  Please enter the 5-digit passcode provided with your invitation.
-                </p>
-
-                <button
-                  type="button"
-                  onClick={verifyInviteCode}
-                  disabled={form.inviteCode.length !== 5}
-                  className="w-full mt-4 py-3 bg-brand-gold-light text-brand-black rounded-full text-[11px] font-semibold tracking-[0.15em] hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  VERIFY CODE
-                </button>
-              </>
+              <button
+                type="button"
+                onClick={verifyInviteCode}
+                disabled={!form.inviteCode.trim()}
+                className="w-full mt-4 py-3 bg-brand-gold-light text-brand-black rounded-full text-[11px] font-semibold tracking-[0.15em] hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                VERIFY CODE
+              </button>
             ) : (
-              <div className="flex items-center gap-2 text-brand-green text-xs font-medium mt-3">
-                <CircleCheck size={16} />
-                Invite code verified
+              <div className="flex items-start gap-2 text-brand-green text-xs font-medium mt-3">
+                <CircleCheck size={16} className="shrink-0" />
+                <span>
+                  Invitation verified. Group:{' '}
+                  <strong>{guestGroup}</strong>
+                </span>
               </div>
             )}
           </div>
 
-          {/* Only show RSVP fields after code has been verified */}
           {inviteVerified && (
             <>
-              {/* Name Fields */}
+              {/* Guest details */}
               <div className="grid sm:grid-cols-2 gap-4 mb-5">
                 <div>
                   <label className="block text-[10px] font-semibold tracking-[0.2em] text-brand-espresso mb-2">
                     FIRST NAME *
                   </label>
-
                   <input
                     type="text"
-                    placeholder="e.g. Adewale"
+                    placeholder="First name"
                     value={form.firstName}
-                    onChange={(e) =>
-                      update('firstName', e.target.value)
+                    onChange={(event) =>
+                      update('firstName', event.target.value)
                     }
                     className={inputClasses('firstName')}
                   />
-
                   {errors.firstName && (
                     <p className="text-red-500 text-xs mt-1">
                       {errors.firstName}
@@ -299,17 +351,15 @@ if (!result.success) {
                   <label className="block text-[10px] font-semibold tracking-[0.2em] text-brand-espresso mb-2">
                     LAST NAME *
                   </label>
-
                   <input
                     type="text"
-                    placeholder="e.g. Bakare"
+                    placeholder="Last name"
                     value={form.lastName}
-                    onChange={(e) =>
-                      update('lastName', e.target.value)
+                    onChange={(event) =>
+                      update('lastName', event.target.value)
                     }
                     className={inputClasses('lastName')}
                   />
-
                   {errors.lastName && (
                     <p className="text-red-500 text-xs mt-1">
                       {errors.lastName}
@@ -323,61 +373,43 @@ if (!result.success) {
                 <label className="block text-[10px] font-semibold tracking-[0.2em] text-brand-espresso mb-2">
                   EMAIL *
                 </label>
-
                 <input
                   type="email"
-                  placeholder="e.g. adewale@example.com"
+                  placeholder="Your email address"
                   value={form.email}
-                  onChange={(e) =>
-                    update('email', e.target.value)
-                  }
+                  onChange={(event) => update('email', event.target.value)}
                   className={inputClasses('email')}
                 />
-
                 {errors.email && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.email}
-                  </p>
+                  <p className="text-red-500 text-xs mt-1">{errors.email}</p>
                 )}
               </div>
 
-              {/* Attendance */}
+              {/* Guest attendance */}
               <div className="mb-6">
                 <label className="block text-[10px] font-semibold tracking-[0.2em] text-brand-espresso mb-3">
                   WILL YOU ATTEND? *
                 </label>
 
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {[
-                    {
-                      value: true,
-                      label: "Yes, I'll be there",
-                    },
-                    {
-                      value: false,
-                      label: "No, I can't make it",
-                    },
-                  ].map((option) => (
+                  {attendanceOptions.map((option) => (
                     <button
                       key={String(option.value)}
                       type="button"
-                      onClick={() =>
-                        update('attendance', option.value)
-                      }
-                      className={`flex items-center justify-between px-5 py-4 rounded-xl border-2 transition-all ${
+                      onClick={() => update('attendance', option.value)}
+                      className={`flex items-center justify-between gap-3 px-5 py-4 rounded-xl border-2 transition-all ${
                         form.attendance === option.value
                           ? 'border-brand-gold bg-brand-gold/5'
                           : 'border-brand-border bg-white hover:border-brand-gray/30'
                       }`}
                     >
-                      <span className="text-sm text-brand-espresso">
+                      <span className="text-sm text-brand-espresso text-left">
                         {option.label}
                       </span>
-
                       {form.attendance === option.value && (
                         <CircleCheck
                           size={18}
-                          className="text-brand-gold"
+                          className="text-brand-gold shrink-0"
                         />
                       )}
                     </button>
@@ -391,6 +423,7 @@ if (!result.success) {
                 )}
               </div>
 
+
               {/* Message */}
               <div className="mb-8">
                 <label className="block text-[10px] font-semibold tracking-[0.2em] text-brand-espresso mb-2">
@@ -399,32 +432,23 @@ if (!result.success) {
                     (optional)
                   </span>
                 </label>
-
                 <textarea
                   rows={4}
                   placeholder={`Share a sweet note, prayers, or well wishes for ${weddingData.couple.partner2} & ${weddingData.couple.partner1}...`}
                   value={form.message}
-                  onChange={(e) =>
-                    update('message', e.target.value)
-                  }
-                  className={`${inputClasses(
-                    'message'
-                  )} resize-none`}
+                  onChange={(event) => update('message', event.target.value)}
+                  className={`${inputClasses('message')} resize-none`}
                 />
               </div>
 
-              {/* Notice */}
+              {/* Event notice */}
               <div className="text-center mb-8">
                 <div className="w-12 h-px bg-brand-border mx-auto mb-4" />
-
                 <p className="text-xs text-brand-gray">
                   Please note that this is strictly an{' '}
-                  <strong className="text-brand-espresso">
-                    adult-only
-                  </strong>{' '}
-                  event (No children).
+                  <strong className="text-brand-espresso">adult-only</strong>{' '}
+                  event. No children.
                 </p>
-
                 <div className="w-12 h-px bg-brand-border mx-auto mt-4" />
               </div>
 
