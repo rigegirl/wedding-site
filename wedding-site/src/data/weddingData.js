@@ -18,7 +18,7 @@ export const weddingData = {
     },
     reception: {
       name: 'Adela Hall',
-      address: 'Opposite Daystar Christian Center, Oregun, Lagos, Nigeria',
+      address: 'Opposite Daystar Christian Center, Ikosi Road, Oregun, Lagos, Nigeria',
       mapUrl: 'https://maps.google.com/?q=Adela+hall+Lagos',
     },
   },
@@ -29,13 +29,13 @@ export const weddingData = {
       title: 'Church Wedding',
       subtitle: 'Holy Matrimony Before God',
       description:
-        'Guests are kindly requested to be seated by 09:30 AM for the processional, exchange of vows, and nuptial blessing.',
+        'Guests are kindly requested to be seated by 10:30 AM for the processional, exchange of vows, and nuptial blessing.',
       tag: 'OFFICIAL',
     },
     {
       time: '1:00 PM',
       title: 'Reception',
-      subtitle: 'Traditional Ceremony, Speeches & Celebration',
+      subtitle: 'Ceremony, Speeches & Celebration',
       description:
         'Grand entrance of the bridal party, couple first dance, reception, toasts, and cake cutting.',
       tag: 'OFFICIAL',
@@ -143,11 +143,5 @@ export const weddingData = {
  gallery: [
   '/images/gallery7.jpeg',
    '/images/gallery13.jpeg',
-   '/images/gallery5.jpeg',
-  '/images/gallery17.jpeg',
-  '/images/gallery 3.jpeg',
-  '/images/gallery12.jpeg',
-  '/images/gallery2.jpeg',
-  '/images/gallery6.jpeg',
 ],
 }

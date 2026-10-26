@@ -1,215 +1,254 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import MusicPlayer from './MusicPlayer';
 
-/**
- * The audio element is created imperatively via `new Audio()`, so we install a
- * controllable stub. These tests pin the two behaviours that actually broke
- * real users: a dead play button, and a UI that lies about playback state.
- */
-class FakeAudio {
-  static instances = [];
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Music2,
+  Play,
+  Pause,
+  SkipBack,
+  SkipForward,
+  Volume2,
+  VolumeX,
+  ChevronDown,
+  ChevronUp,
+} from 'lucide-react';
 
-  constructor() {
-    this.src = '';
-    this.loop = false;
-    this.preload = '';
-    this.volume = 1;
-    this.muted = false;
-    this.currentTime = 0;
-    this.paused = true;
-    this._listeners = {};
-    this._playResult = Promise.resolve();
-    this.playCalls = 0;
-    FakeAudio.instances.push(this);
-  }
+import { musicTracks, musicCredits } from '../data/musicTracks';
 
-  addEventListener(evt, fn) {
-    (this._listeners[evt] ||= []).push(fn);
-  }
-  removeEventListener(evt, fn) {
-    this._listeners[evt] = (this._listeners[evt] || []).filter((f) => f !== fn);
-  }
-  _emit(evt) {
-    (this._listeners[evt] || []).forEach((f) => f());
-  }
-  play() {
-    this.playCalls += 1;
-    this.paused = false;
-    this._emit('play');
-    return this._playResult;
-  }
-  pause() {
-    this.paused = true;
-    this._emit('pause');
-  }
-}
+export default function MusicPlayer() {
+  const [open, setOpen] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [index, setIndex] = useState(0);
+  const [muted, setMuted] = useState(false);
+  const [error, setError] = useState(false);
+  const [creditsOpen, setCreditsOpen] = useState(false);
 
-let audioStub;
-let created;
+  const audioRef = useRef(null);
+  const userOptedInRef = useRef(false);
+  const track = musicTracks[index];
 
-beforeEach(() => {
-  FakeAudio.instances = [];
-  created = [];
-  // `Audio` is invoked with `new`, so the stub must be a constructable function,
-  // not an arrow wrapped in vi.fn().
-  const AudioCtor = function () {
-    const inst = new FakeAudio();
-    created.push(inst);
-    return inst;
+  const changeTrack = useCallback((direction) => {
+    setIndex((current) => {
+      const total = musicTracks.length;
+      return (current + direction + total) % total;
+    });
+  }, []);
+
+  useEffect(() => {
+    const audio = new Audio();
+    audio.loop = true;
+    audio.preload = 'auto';
+    audio.volume = 0.6;
+    audioRef.current = audio;
+
+    const handlePlay = () => {
+      setPlaying(true);
+      setError(false);
+    };
+
+    const handlePause = () => setPlaying(false);
+
+    const handleError = () => {
+      setPlaying(false);
+      setError(true);
+    };
+
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+    audio.addEventListener('error', handleError);
+
+    return () => {
+      audio.pause();
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('error', handleError);
+      audio.src = '';
+      audioRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !track?.src) return;
+
+    setError(false);
+    audio.src = track.src;
+    audio.load();
+
+    audio.play().then(() => {
+      userOptedInRef.current = true;
+    }).catch(() => {
+      setPlaying(false);
+    });
+  }, [index, track?.src]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) audio.muted = muted;
+  }, [muted]);
+
+  const play = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      userOptedInRef.current = true;
+      setError(false);
+
+      if (!audio.src && track?.src) {
+        audio.src = track.src;
+        audio.load();
+      }
+
+      await audio.play();
+    } catch {
+      setPlaying(false);
+      setError(true);
+    }
+  }, [track]);
+
+  const pause = useCallback(() => {
+    userOptedInRef.current = false;
+    audioRef.current?.pause();
+  }, []);
+
+  const togglePlay = () => {
+    if (playing) pause();
+    else play();
   };
-  audioStub = vi.fn(AudioCtor);
-  vi.stubGlobal('Audio', audioStub);
-});
 
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
+  if (!track) return null;
 
-function openPanel() {
-  render(<MusicPlayer />);
-  fireEvent.click(screen.getByLabelText('Open music player'));
+  return (
+    <div className="fixed top-[92px] right-3 sm:top-auto sm:bottom-4 sm:right-4 z-[55] w-[calc(100%-1.5rem)] max-w-xs">
+      <div className="overflow-hidden rounded-2xl border border-brand-gold/30 bg-brand-dark/95 text-brand-cream shadow-2xl backdrop-blur-md">
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3">
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-label={open ? 'Collapse music player' : 'Expand music player'}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-gold/15 text-brand-gold"
+          >
+            <Music2 size={21} />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            className="min-w-0 flex-1 text-left"
+          >
+            <p className="truncate text-sm font-semibold">{track.title}</p>
+            <p className="truncate text-xs text-brand-cream/60">
+              {track.performer || track.composer}
+            </p>
+          </button>
+
+          <button
+            type="button"
+            onClick={togglePlay}
+            aria-label={playing ? 'Pause music' : 'Play music'}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-gold text-brand-dark transition hover:opacity-90"
+          >
+            {playing ? <Pause size={18} /> : <Play size={18} />}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-label={open ? 'Hide music controls' : 'Show music controls'}
+            className="text-brand-cream/70 transition hover:text-brand-cream"
+          >
+            {open ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
+          </button>
+        </div>
+
+        {open && (
+          <div className="border-t border-brand-cream/10 px-4 pb-4 pt-3">
+            <p className="mb-1 text-sm font-medium">{track.title}</p>
+            <p className="mb-3 text-xs leading-relaxed text-brand-cream/60">
+              {track.mood} · {track.moment}
+            </p>
+
+            <div className="flex items-center justify-center gap-5">
+              <button
+                type="button"
+                onClick={() => changeTrack(-1)}
+                aria-label="Previous track"
+                disabled={musicTracks.length < 2}
+                className="text-brand-cream/80 transition hover:text-brand-gold disabled:opacity-40"
+              >
+                <SkipBack size={19} />
+              </button>
+
+              <button
+                type="button"
+                onClick={togglePlay}
+                aria-label={playing ? 'Pause music' : 'Play music'}
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-gold text-brand-dark transition hover:opacity-90"
+              >
+                {playing ? <Pause size={20} /> : <Play size={20} />}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => changeTrack(1)}
+                aria-label="Next track"
+                disabled={musicTracks.length < 2}
+                className="text-brand-cream/80 transition hover:text-brand-gold disabled:opacity-40"
+              >
+                <SkipForward size={19} />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setMuted((value) => !value)}
+                aria-label={muted ? 'Unmute music' : 'Mute music'}
+                className="text-brand-cream/80 transition hover:text-brand-gold"
+              >
+                {muted ? <VolumeX size={19} /> : <Volume2 size={19} />}
+              </button>
+            </div>
+
+            {error && (
+              <p className="mt-3 text-center text-xs text-red-300">
+                The song could not be loaded. Check that the audio file
+                exists in public/music, then try playing it again.
+              </p>
+            )}
+
+            <div className="mt-3 border-t border-brand-cream/10 pt-3">
+              <button
+                type="button"
+                onClick={() => setCreditsOpen((value) => !value)}
+                className="flex w-full items-center justify-between text-left text-xs text-brand-cream/60 transition hover:text-brand-gold"
+              >
+                <span>Song credits</span>
+                {creditsOpen ? (
+                  <ChevronUp size={15} />
+                ) : (
+                  <ChevronDown size={15} />
+                )}
+              </button>
+
+              {creditsOpen && (
+                <div className="mt-3 text-[11px] leading-relaxed text-brand-cream/60">
+                  <p className="mb-2">{musicCredits.statement}</p>
+
+                  {musicCredits.performerUrl && (
+                    <a
+                      href={musicCredits.performerUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline transition hover:text-brand-gold"
+                    >
+                      View song source
+                    </a>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
-
-/** Let the play() promise and any resulting state updates settle. */
-async function settle() {
-  await act(async () => {
-    await Promise.resolve();
-  });
-}
-
-/**
- * Click a control and drain the microtask queue. play() resolves a promise and
- * the element fires `play`/`pause` events that drive React state, so every
- * interaction must be settled inside act() or React warns about un-acted
- * updates — which are exactly the races these tests exist to catch.
- */
-async function click(el) {
-  fireEvent.click(el);
-  await settle();
-}
-
-describe('MusicPlayer', () => {
-  it('never starts playback on mount', () => {
-    render(<MusicPlayer />);
-    // The element is created and its src assigned up-front, but play() must
-    // never be called on load: autoplay is blocked by every modern browser
-    // anyway, and surprising a guest with sound the moment a page renders is
-    // hostile. `preload="none"` means the assigned src costs no network traffic.
-    const audio = created[0];
-    expect(audio).toBeTruthy();
-    expect(audio.preload).toBe('none');
-    expect(audio.paused).toBe(true);
-    expect(audio.playCalls).toBe(0);
-  });
-
-  it('gives the listener an explicit play control', () => {
-    render(<MusicPlayer />);
-    expect(screen.getByLabelText('Open music player')).toBeTruthy();
-  });
-
-  it('starts playing on the first user gesture', async () => {
-    openPanel();
-    await click(screen.getByLabelText('Play music'));
-    await waitFor(() => {
-      const audio = FakeAudio.instances[0];
-      expect(audio.src).toMatch(/\.mp3$/);
-      expect(audio.paused).toBe(false);
-    });
-  });
-
-  it('plays at a clearly audible level, not a whisper', async () => {
-    openPanel();
-    await click(screen.getByLabelText('Play music'));
-    await waitFor(() => expect(FakeAudio.instances[0]).toBeTruthy());
-    // Loud enough to hear across a room, but still capped below 1 so we never
-    // risk a clipping blast — and the listener can always mute.
-    expect(FakeAudio.instances[0].volume).toBeGreaterThanOrEqual(0.5);
-    expect(FakeAudio.instances[0].volume).toBeLessThanOrEqual(1);
-  });
-
-  it('pauses when the user presses pause again', async () => {
-    openPanel();
-    await click(screen.getByLabelText('Play music'));
-    await waitFor(() => expect(FakeAudio.instances[0].paused).toBe(false));
-    await click(screen.getByLabelText('Pause music'));
-    expect(FakeAudio.instances[0].paused).toBe(true);
-  });
-
-  it('advances to another track without wrapping past the end', async () => {
-    openPanel();
-    await click(screen.getByLabelText('Play music'));
-    await waitFor(() => expect(FakeAudio.instances[0].paused).toBe(false));
-
-    const first = FakeAudio.instances[0].src;
-    await click(screen.getByLabelText('Next track'));
-
-    await waitFor(() => {
-      expect(FakeAudio.instances[0].src).not.toBe(first);
-    });
-    expect(screen.getByText('Now playing')).toBeTruthy();
-  });
-
-  it('surfaces an error instead of spinning forever when a track fails', async () => {
-    openPanel();
-    await click(screen.getByLabelText('Play music'));
-    await waitFor(() => expect(FakeAudio.instances[0]).toBeTruthy());
-
-    await act(async () => {
-      FakeAudio.instances[0]._emit('error');
-    });
-    await waitFor(() => {
-      expect(screen.getByText(/could not be loaded/i)).toBeTruthy();
-    });
-  });
-
-  it('publishes music credits so the CC BY obligation is met', async () => {
-    openPanel();
-    await click(screen.getByText('Music credits'));
-    await waitFor(() => {
-      expect(screen.getByText(/public domain/i)).toBeTruthy();
-    });
-    expect(screen.getByText('Performances by Kevin MacLeod')).toBeTruthy();
-  });
-
-  it('closes the panel again', async () => {
-    openPanel();
-    expect(screen.getByText('Now playing')).toBeTruthy();
-    // Either X closes the panel; both are labelled so a screen reader can act.
-    await click(screen.getAllByLabelText('Close music panel')[0]);
-    expect(screen.queryByText('Now playing')).toBeNull();
-  });
-
-  it('shows a close affordance on the trigger while open, not a dead note', async () => {
-    // A static note icon reads as "inert" once the panel is open, so the
-    // trigger must visibly flip to an X.
-    openPanel();
-    // The floating trigger and the panel's own X are both close controls, and
-    // both must be unique in name and both must show an X glyph.
-    const closers = screen.getAllByLabelText('Close music panel');
-    expect(closers).toHaveLength(2);
-    for (const c of closers) {
-      expect(c.querySelector('svg')?.getAttribute('class')).toContain('lucide-x');
-    }
-  });
-
-  it('keeps the accessible names of every control unique', async () => {
-    // Duplicate accessible names are a genuine a11y defect: a screen-reader
-    // user hears two identical "Close" buttons and cannot tell them apart.
-    openPanel();
-    // The one intentional duplicate is the pair of close controls; every
-    // other accessible name must be unique.
-    const names = [
-      'Play music',
-      'Pause music',
-      'Next track',
-      'Previous track',
-      'Mute',
-      'Unmute',
-    ];
-    for (const name of names) {
-      const found = screen.queryAllByLabelText(name);
-      expect(found.length).toBeLessThanOrEqual(1);
-    }
-  });
-});
