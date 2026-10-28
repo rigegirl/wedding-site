@@ -7,9 +7,12 @@ const GROUP_CODES = {
   HUTMOL26: 'HUTMOL Magodo',
   LP21L26: 'LP 21 Leaders Group',
   DADFAM26: "Daddy's family",
+  DADFRE26: "Daddy's friends",
   MUMFAM26: "Mummy's family",
   MUCOL726: "Mummy's colleagues",
+  MUMFRE26: "Mummy's colleagues",
   COMMEM26: 'Chapel of Mercy members',
+  COMWOR26: 'Chapel of Mercy members',
   COMMIN26: 'COM (Ministers)',
   '74921': 'General Invitation',
 };

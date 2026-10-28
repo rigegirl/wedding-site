@@ -106,7 +106,7 @@ export const weddingData = {
     {
       question: "What's the RSVP deadline?",
       answer:
-        'Please RSVP by October 30th, 2026. This helps us plan seating and catering accurately.',
+        'Please RSVP by November 10th, 2026. This helps us plan seating and catering accurately.',
     },
     {
       question: 'Can I bring a guest?',
@@ -126,7 +126,7 @@ export const weddingData = {
     {
       question: 'Are the ceremony and reception happening in the same venue?',
       answer:
-        'No, the church ceremony and reception are at different locations. The church ceremony is at RCCG, Chapel of Mercy in Ketu, and the reception is at Adela Hall in Oregun. Directions for both are provided above.',
+        'No, the church ceremony and reception are at different locations. The church ceremony is at RCCG, Chapel of Mercy in Ketu, and the reception is at Adela Hall in Ikosi Road, Oregun. Directions for both are provided above.',
     },
     {
       question: 'Is the wedding indoors or outdoors?',
