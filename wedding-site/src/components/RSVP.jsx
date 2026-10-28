@@ -4,16 +4,18 @@ import { Key, Send, CircleCheck } from 'lucide-react';
 
 const GROUP_CODES = {
   DLF726: "Daddy's legal friends/colleagues",
-  HUTMOL26: 'HUTMOL Magodo',
+  HUTMOL26: 'HUMOL Magodo',
   LP21L26: 'LP 21 Leaders Group',
   DADFAM26: "Daddy's family",
   DADFRE26: "Daddy's friends",
   MUMFAM26: "Mummy's family",
   MUCOL726: "Mummy's colleagues",
-  MUMFRE26: "Mummy's colleagues",
+  MUMFRE26: "Mummy's Friends",
   COMMEM26: 'Chapel of Mercy members',
   COMWOR26: 'Chapel of Mercy members',
   COMMIN26: 'COM (Ministers)',
+  DADPAS: "INVITED PASTORS",
+  CHURCH: "CHURCH FRIENDS",
   '74921': 'General Invitation',
 };
 
