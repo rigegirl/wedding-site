@@ -200,7 +200,7 @@ export default function RSVP() {
   };
 
   const deadlineDate = new Date(
-    '2026-10-27T12:00:00'
+    '2026-11-14T12:00:00'
   ).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'long',
